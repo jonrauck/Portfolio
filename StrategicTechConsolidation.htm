@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study: Strategic IT & Telecom Consolidation</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        .custom-card {
+            background-color: #f0f9ff; /* A very light blue */
+            border: 1px solid #e0f2fe;
+        }
+        /* Style to prevent background scroll when modal is open */
+        .modal-open {
+            overflow: hidden;
+        }
+        
+        /* Add styles for category lines, etc. */
+        /* Styles for Case Study Modals */
+        .modal-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-container {
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal-scroll-content {
+            -webkit-overflow-scrolling: touch;
+        }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] .chevron {
+            transform: rotate(90deg);
+        }
+        .scorecard-table, .sow-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .scorecard-table th, .scorecard-table td,
+        .sow-table th, .sow-table td {
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .scorecard-table thead th, .sow-table thead th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+        }
+        .swimlane {
+            flex: 1;
+            background-color: #f9fafb;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            min-width: 200px;
+        }
+        .swimlane-header {
+            padding: 0.75rem;
+            font-weight: bold;
+            border-bottom: 1px solid #e5e7eb;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .task-box {
+            background-color: white;
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+        .fishbone {
+    position: relative;
+    padding: 2rem 0;
+}
+.fishbone-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.fishbone-spine {
+    flex-grow: 1;
+    height: 4px;
+    background-color: #374151;
+}
+.fishbone-head {
+    background-color: #2563EB; /* Blue box */
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.375rem;
+    font-weight: bold;
+    text-align: center;
+    flex-shrink: 0; /* Prevents the head from shrinking */
+}
+.fishbone-ribs-top, .fishbone-ribs-bottom {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+/* THIS IS THE NEW CODE FOR SPACING */
+.fishbone-ribs-top {
+    margin-bottom: 1.5rem; /* Pushes the top ribs up, away from the center */
+}
+.fishbone-ribs-bottom {
+    margin-top: 1.5rem; /* Pushes the bottom ribs down, away from the center */
+}
+.fishbone-category {
+    position: relative;
+    padding: 1rem;
+    width: 30%;
+}
+.fishbone-ribs-top .fishbone-category {
+    padding-bottom: 2.5rem; /* Controls space for the bone */
+}
+.fishbone-ribs-bottom .fishbone-category {
+    padding-top: 2.5rem; /* Controls space for the bone */
+}
+.fishbone-ribs-top .fishbone-category::after,
+.fishbone-ribs-bottom .fishbone-category::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    background: #6b7280;
+    left: 50%;
+    transform: translateX(-50%); /* Center the line */
+}
+.fishbone-ribs-top .fishbone-category::after {
+    height: 2.5rem; /* This is the bone length */
+    bottom: 0; /* Position at the bottom edge of the category box */
+}
+.fishbone-ribs-bottom .fishbone-category::after {
+    height: 2.5rem; /* This is the bone length */
+    top: 0; /* Position at the top edge of the category box */
+}
+.fishbone-category h4 { 
+    font-weight: bold; 
+    margin-bottom: 0.5rem; 
+}
+.fishbone-category ul { 
+    list-style-type: disc; 
+    padding-left: 1rem; 
+    font-size: 0.875rem; 
+}
+        .workflow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .workflow-step, .workflow-end {
+            background-color: #fff;
+            border: 1px solid #d1d5db;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+        .workflow-end { background-color: #dbeafe; border-color: #93c5fd; }
+        .workflow-arrow::after {
+            content: '→';
+            font-size: 1.5rem;
+            color: #9ca3af;
+        }
+        .blinking-light {
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Main Page Container -->
+    <div class="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+        <div class="bg-white rounded-lg shadow-xl w-full flex flex-col">
+            <!-- Header Section -->
+            <div class="p-6 md:p-8 border-b">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-sm font-semibold text-emerald-600">IT OPERATIONS</span>
+                        <h2 id="modal-title-2" class="text-2xl md:text-3xl font-bold text-gray-900 mt-1">Strategic IT & Telecom Consolidation</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="overflow-y-auto bg-slate-50">
+                <div class="p-8 md:p-12 space-y-16">
+                    
+                    <!-- Executive Summary -->
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-rocket mr-3 text-indigo-600"></i>1.0 Executive Summary</h2>
+                        <div class="mt-4 border-l-4 border-indigo-500 pl-6 text-gray-700 leading-relaxed space-y-4">
+                            <p>[Client Company Name] faced significant operational friction and financial waste due to decentralized IT and telecom management. A lack of formal governance resulted in redundant software licensing, poorly optimized mobile fleet plans, and fragmented communication workflows. This "tech bloat" created an administrative burden and an estimated annual overspend exceeding <strong>$55,000</strong>.</p>
+                            <p>This case study details a strategic initiative designed to address these challenges head-on. By applying a structured, data-driven methodology, we successfully consolidated software, optimized telecom contracts, and established a robust governance framework. The project not only achieved <strong>$56,600 in annualized savings</strong> but also reclaimed over <strong>180 administrative hours</strong> and significantly improved operational efficiency and security posture.</p>
+                        </div>
+                    </section>
+                    
+                    <!-- The Challenge -->
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-bullseye mr-3 text-indigo-600"></i>2.0 Problem Statement & KPIs</h2>
+                        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="bg-red-50 border border-red-200 p-6 rounded-lg"><h3 class="font-bold text-lg text-red-800 mb-3">Initial Situation Analysis</h3><ul class="space-y-3 text-red-900"><li class="flex items-start"><span class="font-bold mr-2 text-red-600">✗</span>Decentralized procurement with no oversight.</li><li class="flex items-start"><span class="font-bold mr-2 text-red-600">✗</span>Multiple communication platforms causing user confusion.</li><li class="flex items-start"><span class="font-bold mr-2 text-red-600">✗</span>No process for decommissioning legacy systems.</li><li class="flex items-start"><span class="font-bold mr-2 text-red-600">✗</span>Reactive, manual management of telecom plans.</li></ul></div>
+                            <div class="bg-green-50 border border-green-200 p-6 rounded-lg"><h3 class="font-bold text-lg text-green-800 mb-3">Project Goals & Target KPIs</h3><ul class="space-y-3 text-green-900"><li class="flex items-start"><span class="font-bold mr-2 text-green-600">✓</span>Reduce annual IT/telecom spend by at least 5%.</li><li class="flex items-start"><span class="font-bold mr-2 text-green-600">✓</span>Establish a formal IT Governance Policy (SOP).</li><li class="flex items-start"><span class="font-bold mr-2 text-green-600">✓</span>Implement a yearly software performance review process.</li></ul></div>
+                        </div>
+                    </section>
+                    
+                    <!-- The Solution -->
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-sitemap mr-3 text-indigo-600"></i>3.0 Project Methodology: A Lean Six Sigma Approach</h2>
+                        <p class="mt-4 text-gray-700 leading-relaxed">To ensure a structured, repeatable, and data-driven outcome, the project followed the DMAIC (Define, Measure, Analyze, Improve, Control) framework, a cornerstone of Lean Six Sigma for process improvement.</p>
+                        <div class="mt-8 space-y-8">
+                            <div class="flex items-start"><div class="flex-shrink-0 h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">D</div><div class="ml-6"><h3 class="text-xl font-semibold text-gray-800">Define: Chartering the Project (Week 1)</h3><p class="mt-1 text-gray-700">Formalized the project's purpose and scope. A Project Charter and high-level Statement of Work (SOW) were created, outlining objectives, stakeholders, and the KPIs listed above.</p></div></div>
+                            <div class="flex items-start"><div class="flex-shrink-0 h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">M</div><div class="ml-6"><h3 class="text-xl font-semibold text-gray-800">Measure: Baselining Performance (Weeks 1-2)</h3><p class="mt-1 text-gray-700">Established a quantitative baseline by collecting 12 months of invoices, license agreements, and telecom usage data. Conducted stakeholder interviews to gather qualitative data on workflow pain points.</p></div></div>
+                            <div class="flex items-start"><div class="flex-shrink-0 h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">A</div><div class="ml-6"><h3 class="text-xl font-semibold text-gray-800">Analyze: Root Cause Analysis (Weeks 3-4)</h3><p class="mt-1 text-gray-700">Utilized the "5 Whys" technique to drill down past surface-level symptoms. The analysis confirmed that a lack of <strong>IT governance</strong> and <strong>proactive vendor management</strong> were the core issues driving excess costs.</p></div></div>
+                             <!-- Unified Diagram Styling -->
+                                <div class="mt-6 bg-gray-50 p-6 rounded-lg border border-gray-200">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div>
+                                            <h4 class="font-bold text-lg text-center mb-4 text-gray-800">Problem Area 1: Redundant Software</h4>
+                                            <ul class="space-y-2 text-sm">
+                                                <li class="p-3 bg-white rounded-lg shadow-sm"><strong>Problem:</strong> Annual software spend is <span class="font-bold text-red-600">$36,600</span> higher than necessary.</li>
+                                                <li class="p-3 bg-white rounded-lg shadow-sm ml-4"><strong class="text-gray-500">↳ 1. Why?</strong> Paying for active licenses for Skype and RingCentral.</li>
+                                                <li class="p-3 bg-white rounded-lg shadow-sm ml-8"><strong class="text-gray-500">↳ 2. Why?</strong> Staff used them alongside official Teams and Zoom platforms.</li>
+                                                <li class="p-3 bg-white rounded-lg shadow-sm ml-12"><strong class="text-gray-500">↳ 3. Why?</strong> No official standard or decommissioning plan existed for old software.</li>
+                                                <li class="p-3 bg-white rounded-lg shadow-sm ml-16"><strong class="text-gray-500">↳ 4. Why?</strong> Past IT rollouts focused only on implementation, not on user transition or retirement of old systems.</li>
+                                                <li class="p-3 bg-red-100 text-red-800 rounded-lg shadow-sm ml-20"><strong class="font-bold">↳ 5. Why? [ROOT CAUSE]</strong> Lack of a formal <strong>IT governance policy.</strong></li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-lg text-center mb-4 text-gray-800">Problem Area 2: High Mobile Costs</h4>
+                                            <ul class="space-y-2 text-sm">
+                                                <li class="p-3 bg-white rounded-lg shadow-sm"><strong>Problem:</strong> Wasting <span class="font-bold text-red-600">$20,000</span> annually in overages & admin time.</li>
+                                                <li class="p-3 bg-white rounded-lg shadow-sm ml-4"><strong class="text-gray-500">↳ 1. Why?</strong> Data plans were oversized and managed manually after issues arose.</li>
+                                                <li class="p-3 bg-white rounded-lg shadow-sm ml-8"><strong class="text-gray-500">↳ 2. Why?</strong> The plan was never reviewed against actual usage data.</li>
+                                                <li class="p-3 bg-white rounded-lg shadow-sm ml-12"><strong class="text-gray-500">↳ 3. Why?</strong> There was no single point of contact for vendor management.</li>
+                                                <li class="p-3 bg-white rounded-lg shadow-sm ml-16"><strong class="text-gray-500">↳ 4. Why?</strong> Telecom was viewed as a low-level administrative task, not a strategic cost center.</li>
+                                                <li class="p-3 bg-red-100 text-red-800 rounded-lg shadow-sm ml-20"><strong class="font-bold">↳ 5. Why? [ROOT CAUSE]</strong> Lack of a proactive <strong>vendor & asset management strategy.</strong></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="flex items-start"><div class="flex-shrink-0 h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">I</div><div class="ml-6"><h3 class="text-xl font-semibold text-gray-800">Improve: Implementation & Optimization (Weeks 5-7)</h3><p class="mt-1 text-gray-700">Executed the consolidation plan: renegotiated carrier contracts, decommissioned redundant software (Skype, RingCentral), and standardized on the Microsoft Teams & Zoom ecosystem. A clear communication plan ensured a smooth transition for all employees.</p></div></div>
+                            <div class="flex items-start"><div class="flex-shrink-0 h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">C</div><div class="ml-6"><h3 class="text-xl font-semibold text-gray-800">Control: Sustaining the Gains (Week 8)</h3><p class="mt-1 text-gray-700">To prevent regression and ensure long-term value, two key documents were created: a formal <strong>IT Governance Standard Operating Procedure (SOP)</strong> and a <strong>Vendor & Asset Management Playbook</strong>. The SOP included a new policy mandating that any IT project affecting over 25% of staff must include a formal change management plan, ensuring smooth user transitions and successful adoption before legacy systems are retired.</p></div></div>
+                        </div>
+                    </section>
+                    
+                    <!-- The Results -->
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-chart-pie mr-3 text-indigo-600"></i>4.0 Results: Quantifiable Impact & Strategic Value</h2>
+                        <p class="mt-4 text-gray-700 leading-relaxed">This initiative transcended simple cost-cutting. By addressing foundational process failures, we delivered measurable financial returns, enhanced operational capabilities, and provided a sustainable framework for future growth and technological adoption.</p>
+                        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
+                            <div class="bg-green-100 p-6 rounded-lg border border-green-200 transform hover:scale-105 transition-transform duration-300"><h3 class="text-5xl font-extrabold text-green-700">$56,600</h3><p class="mt-2 font-semibold text-gray-800">Total Annualized Savings</p><p class="text-sm text-gray-600">(18% Reduction)</p></div>
+                            <div class="bg-indigo-100 p-6 rounded-lg border border-indigo-200 transform hover:scale-105 transition-transform duration-300"><h3 class="text-5xl font-extrabold text-indigo-700">180+</h3><p class="mt-2 font-semibold text-gray-800">Admin Hours Reclaimed Annually</p><p class="text-sm text-gray-600">(30% Efficiency Gain)</p></div>
+                            <div class="bg-purple-100 p-6 rounded-lg border border-purple-200 transform hover:scale-105 transition-transform duration-300"><h3 class="text-5xl font-extrabold text-purple-700">2</h3><p class="mt-2 font-semibold text-gray-800">New Governance Policies</p><p class="text-sm text-gray-600">(SOP & Playbook)</p></div>
+                        </div>
+                        <div class="mt-12 bg-gray-50 p-8 rounded-lg border border-gray-200">
+                        <h3 class="font-bold text-xl text-gray-800 mb-4">Project Outcome Analysis</h3>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-semibold text-lg text-gray-800 mb-2">Financial & Operational Impact</h4>
+                                <ul class="list-disc list-inside space-y-3 text-gray-700">
+                                    <li><strong>Software Cost Reduction: $36,600.</strong> Eliminated redundant platforms (Skype: $21.6k, RingCentral: $15k) by standardizing on a unified communications stack.</li>
+                                    <li><strong>Telecom Cost Reduction: $20,000.</strong> Right-sized mobile data plans based on a 12-month usage analysis, eliminating overage charges and waste.</li>
+                                    <li><strong>Vendor Management Optimization:</strong> Secured a dedicated account manager from the primary telecom carrier to handle all mobile device support, offloading this administrative burden and providing a single point of contact for escalations.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg text-gray-800 mb-2">Lasting Strategic Value</h4>
+                                <ul class="list-disc list-inside space-y-3 text-gray-700">
+                                    <li><strong>Improved Collaboration:</strong> A single, unified communication platform (Microsoft Teams & Zoom) reduced friction and improved workflow efficiency across departments.</li>
+                                    <li><strong>Enhanced Security:</strong> Decommissioning unmanaged legacy software reduced the company's security attack surface.</li>
+                                    <li><strong>Scalable Framework:</strong> The new governance SOPs provide a clear, sustainable framework for all future technology evaluation, procurement, and lifecycle management, ensuring these savings persist.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+
+</body>
+</html>

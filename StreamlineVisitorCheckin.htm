@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study: Streamlined Visitor Check-in</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        .custom-card {
+            background-color: #f0f9ff; /* A very light blue */
+            border: 1px solid #e0f2fe;
+        }
+        /* Style to prevent background scroll when modal is open */
+        .modal-open {
+            overflow: hidden;
+        }
+        
+        /* Add styles for category lines, etc. */
+        /* Styles for Case Study Modals */
+        .modal-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-container {
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal-scroll-content {
+            -webkit-overflow-scrolling: touch;
+        }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] .chevron {
+            transform: rotate(90deg);
+        }
+        .scorecard-table, .sow-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .scorecard-table th, .scorecard-table td,
+        .sow-table th, .sow-table td {
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .scorecard-table thead th, .sow-table thead th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+        }
+        .swimlane {
+            flex: 1;
+            background-color: #f9fafb;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            min-width: 200px;
+        }
+        .swimlane-header {
+            padding: 0.75rem;
+            font-weight: bold;
+            border-bottom: 1px solid #e5e7eb;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .task-box {
+            background-color: white;
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+        .fishbone {
+    position: relative;
+    padding: 2rem 0;
+}
+.fishbone-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.fishbone-spine {
+    flex-grow: 1;
+    height: 4px;
+    background-color: #374151;
+}
+.fishbone-head {
+    background-color: #2563EB; /* Blue box */
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.375rem;
+    font-weight: bold;
+    text-align: center;
+    flex-shrink: 0; /* Prevents the head from shrinking */
+}
+.fishbone-ribs-top, .fishbone-ribs-bottom {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+/* THIS IS THE NEW CODE FOR SPACING */
+.fishbone-ribs-top {
+    margin-bottom: 1.5rem; /* Pushes the top ribs up, away from the center */
+}
+.fishbone-ribs-bottom {
+    margin-top: 1.5rem; /* Pushes the bottom ribs down, away from the center */
+}
+.fishbone-category {
+    position: relative;
+    padding: 1rem;
+    width: 30%;
+}
+.fishbone-ribs-top .fishbone-category {
+    padding-bottom: 2.5rem; /* Controls space for the bone */
+}
+.fishbone-ribs-bottom .fishbone-category {
+    padding-top: 2.5rem; /* Controls space for the bone */
+}
+.fishbone-ribs-top .fishbone-category::after,
+.fishbone-ribs-bottom .fishbone-category::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    background: #6b7280;
+    left: 50%;
+    transform: translateX(-50%); /* Center the line */
+}
+.fishbone-ribs-top .fishbone-category::after {
+    height: 2.5rem; /* This is the bone length */
+    bottom: 0; /* Position at the bottom edge of the category box */
+}
+.fishbone-ribs-bottom .fishbone-category::after {
+    height: 2.5rem; /* This is the bone length */
+    top: 0; /* Position at the top edge of the category box */
+}
+.fishbone-category h4 { 
+    font-weight: bold; 
+    margin-bottom: 0.5rem; 
+}
+.fishbone-category ul { 
+    list-style-type: disc; 
+    padding-left: 1rem; 
+    font-size: 0.875rem; 
+}
+        .workflow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .workflow-step, .workflow-end {
+            background-color: #fff;
+            border: 1px solid #d1d5db;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+        .workflow-end { background-color: #dbeafe; border-color: #93c5fd; }
+        .workflow-arrow::after {
+            content: '→';
+            font-size: 1.5rem;
+            color: #9ca3af;
+        }
+        .blinking-light {
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Main Page Container -->
+    <div class="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+        <div class="bg-white rounded-lg shadow-xl w-full flex flex-col">
+            <!-- Header Section -->
+            <div class="p-6 md:p-8 border-b">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-sm font-semibold text-pink-600">PROCESS AUTOMATION</span>
+                        <h2 id="modal-title-2" class="text-2xl md:text-3xl font-bold text-gray-900 mt-1">Streamlined Visitor Check-in</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="overflow-y-auto bg-slate-50">
+                <div class="p-8 md:p-12 space-y-16">
+                    
+                    <!-- Executive Summary -->
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-rocket mr-3 text-indigo-600"></i>1.0 Executive Summary</h2>
+                        <div class="mt-4 border-l-4 border-indigo-500 pl-6 text-gray-700 leading-relaxed space-y-4">
+                            <p>This case study outlines the operational transformation of a critically flawed visitor management process across three corporate offices. The legacy manual, paper-based system was inefficient and insecure, consuming over 45 administrative hours weekly while exposing the company to significant security and compliance liabilities. To resolve these issues, the Envoy Visitor Management System was implemented, a project that transitioned the entire visitor experience to a fully automated and professional digital platform. The initiative included deploying new check-in hardware, customizing the software to company standards, digitizing legal documents, and developing comprehensive operating procedures for staff.</p>
+                            <p>The project was an unequivocal success, yielding substantial and immediate returns. The new system reclaimed over 45 administrative hours weekly, achieved 100% NDA compliance for designated visitors, and reduced associated manual tasks by 95%, resulting in a full return on investment (ROI) in less than six months. Critically, this transformation fortified the company’s security posture with a real-time, auditable log of all on-site personnel and modernized the corporate image with a seamless guest experience, converting a high-risk administrative function into a secure, value-enabling asset.</p>
+                        </div>
+                    </section>
+                    
+                    <!-- The Challenge -->
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-bullseye mr-3 text-indigo-600"></i>2.0 KPIs & Results</h2>
+                        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                            <div class="bg-green-100 p-6 rounded-lg border border-green-200"><div class="text-5xl font-extrabold text-green-700">45+</div><div class="mt-2 font-semibold text-gray-800">Hours Saved Weekly</div></div>
+                            <div class="bg-green-100 p-6 rounded-lg border border-green-200"><div class="text-5xl font-extrabold text-green-700">100%</div><div class="mt-2 font-semibold text-gray-800">NDA Compliance Achieved</div></div>
+                            <div class="bg-indigo-100 p-6 rounded-lg border border-indigo-200"><div class="text-5xl font-extrabold text-indigo-700">95%</div><div class="mt-2 font-semibold text-gray-800">Reduction in Manual Tasks</div></div>
+                            <div class="bg-indigo-100 p-6 rounded-lg border border-indigo-200"><div class="text-5xl font-extrabold text-indigo-700">&gt;80%</div><div class="mt-2 font-semibold text-gray-800">Faster Host Notification</div></div>
+                        </div>
+                    </section>
+                    
+                    <!-- The Solution -->
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-search mr-3 text-indigo-600"></i>3.0 Problem Analysis (DMAIC Framework)</h2>
+                        <p class="mt-4 text-gray-700 leading-relaxed">An analysis of the visitor check-in process revealed a system plagued by operational waste (Muda), inconsistency (Mura), and overburden (Muri). The manual process across three US offices was a significant source of administrative drain, consuming over 45 hours weekly. This inefficiency created a poor first impression, posed security risks due to unreliable visitor logs, and exposed the company to compliance liabilities from inconsistent NDA management.</p>
+                        <div class="mt-6 bg-gray-50 p-6 rounded-lg border border-gray-200">
+                            <h4 class="text-xl font-semibold text-center mb-1">Current State Workflow: High-Friction, Manual Process</h4>
+                            <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full mt-6">
+                                <div class="swimlane"><div class="swimlane-header bg-yellow-100 text-yellow-800">VISITOR</div><div class="space-y-3 p-2"><div class="task-box">1. Arrives</div><div class="task-box mt-12">5. Signs Logbook</div><div class="task-box mt-12">8. Signs Paper NDA</div></div></div>
+                                <div class="swimlane"><div class="swimlane-header bg-indigo-100 text-indigo-800">FRONT DESK STAFF</div><div class="space-y-3 p-2"><div class="task-box">2. Greets, asks purpose</div><div class="task-box">3. Finds paper logbook & pen</div><div class="task-box">4. Asks visitor to sign in</div><div class="task-box">6. Finds paper NDA form</div><div class="task-box">7. Asks visitor to read & sign</div><div class="task-box">9. Manually searches directory</div><div class="task-box bg-red-100 border-red-300">10. Calls or emails host</div><div class="task-box bg-red-100 border-red-300">12. Waits for host to respond</div><div class="task-box">14. Files paper NDA</div></div></div>
+                                <div class="swimlane"><div class="swimlane-header bg-purple-100 text-purple-800">EMPLOYEE HOST</div><div class="space-y-3 p-2 mt-64"><div class="task-box bg-red-100 border-red-300">11. (Maybe) Sees notification</div><div class="task-box bg-red-100 border-red-300">13. Finishes task, walks to desk</div><div class="task-box bg-green-100 border-green-300">15. Greets visitor</div></div></div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Standardized Collapsible SOW Section -->
+                <div class="mt-12">
+                    <details class="border border-gray-200 rounded-lg bg-white overflow-hidden" open>
+                        <summary class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                                <i class="fas fa-file-signature mr-3 text-indigo-600"></i>
+                                Statement of Work (SOW)
+                            </h3>
+                            <span class="chevron text-indigo-600 transform transition-transform duration-200 text-2xl font-light">&rsaquo;</span>
+                        </summary>
+                        <div class="p-6 border-t border-gray-200 text-gray-700 space-y-8 document-content">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900 border-b-2 pb-2">1. Project Charter & Objectives</h3>
+                                <ul class="list-disc mt-4">
+                                    <li><strong>Modernize Visitor Experience:</strong> Implement a professional, seamless, and efficient digital check-in process.</li>
+                                    <li><strong>Enhance Security & Control:</strong> Establish a real-time, accurate, and auditable digital log of all on-site visitors.</li>
+                                    <li><strong>Automate & Eliminate Waste:</strong> Eradicate manual tasks including paper logs, NDA filing, and host notification.</li>
+                                    <li><strong>Guarantee Compliance:</strong> Enforce 100% compliance by mandating digital NDA signatures.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900 border-b-2 pb-2">2. Scope of Work & Execution Plan</h3>
+                                <p class="mt-4">This project encompasses the end-to-end procurement, installation, configuration, and deployment of the Envoy system across three (3) designated office locations.</p>
+                                <h4 class="text-lg font-semibold mt-4">Phase 1: Hardware Procurement & Staging</h4>
+                                <ol class="list-decimal">
+                                    <li>Procure three (3) iPads and three (3) secure Heckler Design stands.</li>
+                                    <li>Procure three (3) Brother QL-820NWB badge printers.</li>
+                                    <li>Assemble and secure hardware at each front desk location.</li>
+                                    <li>Connect and configure printers on local networks, coordinating with IT for static IP assignments.</li>
+                                </ol>
+                                <h4 class="text-lg font-semibold mt-4">Phase 2: System Configuration & Customization</h4>
+                                <ol class="list-decimal">
+                                    <li>Establish master Envoy account and configure location-specific settings.</li>
+                                    <li>Integrate company branding (logos, color schemes) into the visitor UI.</li>
+                                    <li>Digitize and deploy the corporate NDA, configuring signing logic and validity periods.</li>
+                                    <li>Populate employee directory via CSV import to enable host selection and notifications.</li>
+                                    <li>Configure and test automated host notifications via Email and Slack.</li>
+                                    <li>Design and customize visitor badge templates.</li>
+                                    <li>Lock down iPads into Kiosk Mode using Apple's Guided Access feature.</li>
+                                </ol>
+                                <h4 class="text-lg font-semibold mt-4">Phase 3: Documentation, Training & Go-Live</h4>
+                                <ol class="list-decimal">
+                                    <li>Develop comprehensive Standard Operating Procedures (SOPs) for both Front Desk (User) and IT (Technical) teams.</li>
+                                    <li>Conduct structured training sessions for all end-users and technical staff.</li>
+                                    <li>Execute a phased go-live, with on-site support for the initial deployment week.</li>
+                                    <li>Conduct a post-implementation review to validate success against KPIs.</li>
+                                </ol>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900 border-b-2 pb-2">3. Project Deliverables</h3>
+                                <ul class="list-disc mt-4">
+                                    <li>Three (3) fully functional Envoy visitor check-in kiosks.</li>
+                                    <li>Three (3) fully functional and networked badge printers.</li>
+                                    <li>A fully configured Envoy software environment.</li>
+                                    <li><strong>SOP-FD-001:</strong> Envoy Daily Operations (for Front Desk).</li>
+                                    <li><strong>SOP-IT-004:</strong> Envoy System Administration (for IT).</li>
+                                    <li>Completed training logs and user acceptance documentation.</li>
+                                    <li>Project close-out report detailing ROI and KPI achievement.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900 border-b-2 pb-2">4. Solution: Future State Value Stream Map</h3>
+                                <div class="mt-6 bg-gray-50 p-6 rounded-lg border border-gray-200">
+                                    <h4 class="text-xl font-semibold text-center mb-1">Future State Workflow: Automated & Efficient Process</h4>
+                                    <p class="text-sm text-center text-gray-600 mb-6">The new, streamlined process eliminates manual steps and bottlenecks, creating a frictionless and professional experience through automation.</p>
+                                    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full">
+                                        <div class="swimlane">
+                                            <div class="swimlane-header bg-yellow-100 text-yellow-800">VISITOR</div>
+                                            <div class="space-y-3 p-2">
+                                                <div class="task-box bg-blue-100 border-blue-300">1. Arrives & uses iPad</div>
+                                                <div class="task-box bg-blue-100 border-blue-300">2. Enters details, selects host, signs NDA digitally</div>
+                                                <div class="task-box bg-blue-100 border-blue-300">3. Receives printed badge</div>
+                                            </div>
+                                        </div>
+                                        <div class="swimlane">
+                                            <div class="swimlane-header bg-gray-700 text-white">ENVOY SYSTEM (AUTOMATION)</div>
+                                            <div class="space-y-3 p-2 mt-16">
+                                                <div class="task-box bg-green-100 border-green-300">4. Instantly notifies host (Slack/Email)</div>
+                                                <div class="task-box bg-green-100 border-green-300">5. Securely logs visitor data & NDA</div>
+                                            </div>
+                                        </div>
+                                        <div class="swimlane">
+                                            <div class="swimlane-header bg-purple-100 text-purple-800">EMPLOYEE HOST</div>
+                                            <div class="space-y-3 p-2 mt-24">
+                                                <div class="task-box bg-green-100 border-green-300">6. Receives instant notification with guest photo</div>
+                                                <div class="task-box bg-green-100 border-green-300">7. Walks to front desk to greet visitor</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900 border-b-2 pb-2">5. Project Accomplishments & ROI</h3>
+                                <p class="mt-4">The successful implementation of the Envoy system transformed front desk operations from a cost center into a value-enabling function. The project exceeded all initial objectives.</p>
+                                <ul class="list-disc mt-4">
+                                    <li><strong>Operational Efficiency (ROI):</strong> Saved over <strong>45 hours of administrative work per week</strong>, translating to approximately 2,340 hours annually. At a blended administrative rate, this represents a significant direct cost saving and a project payback period of less than 6 months.</li>
+                                    <li><strong>Compliance & Risk Mitigation:</strong> Achieved <strong>100% NDA compliance</strong>, creating a complete, auditable trail of all signed legal documents and eliminating a major source of corporate liability.</li>
+                                    <li><strong>Enhanced Security Posture:</strong> Established a real-time, digital manifest of all on-site personnel, providing critical, instant-access data for emergency response and improving overall facility security.</li>
+                                    <li><strong>Modernized Corporate Image:</strong> Elevated the company's brand by providing a professional, modern, and seamless first impression for all guests, candidates, and partners, reinforcing its image as a technology-forward organization.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Standardized Collapsible SOP Section -->
+                <div class="mt-8">
+                    <details class="border border-gray-200 rounded-lg bg-white overflow-hidden" open>
+                        <summary class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                                <i class="fas fa-cogs mr-3 text-indigo-600"></i>
+                                Standard Operating Procedures (SOPs)
+                            </h3>
+                            <span class="chevron text-indigo-600 transform transition-transform duration-200 text-2xl font-light">&rsaquo;</span>
+                        </summary>
+                        <div class="p-6 border-t border-gray-200 text-gray-700 space-y-8 document-content">
+                            <!-- Front Desk SOP -->
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900 border-b-2 pb-2">SOP-FD-001: Front Desk - Envoy Daily Operations</h3>
+                                <div class="p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 rounded-r-lg my-4">
+                                    <p><strong>Purpose:</strong> This document outlines the daily procedures for using and managing the Envoy visitor system from an end-user perspective.</p>
+                                    <p class="mt-2"><strong>Audience:</strong> Front Desk Staff, Office Managers, Administrative Assistants.</p><br>
+                                    <p><strong>Website Login:</strong> https://dashboard.envoy.com/login</p>
+                                </div>
+                                <h3>1. Visitor Data & Compliance</h3>
+                                <h4>1.1 How to Access Visitor Logs</h4>
+                                <ol class="list-decimal">
+                                    <li>Open a web browser and log in to the <strong>Envoy Dashboard</strong>.</li>
+                                    <li>Click on <strong>Visitors</strong> in the top navigation bar.</li>
+                                    <li>To find a specific person or view past dates, use the search bar and date filters.</li>
+                                </ol>
+                                <h4>1.2 How to View a Signed NDA</h4>
+                                <ol class="list-decimal">
+                                    <li>In the visitor log, click on the visitor's entry to open their details.</li>
+                                    <li>In the <strong>Legal docs</strong> section, click the <strong>View</strong> link to open the signed PDF.</li>
+                                </ol>
+                                <h3>2. System & Branding Updates (with approval)</h3>
+                                <h4>2.1 How to Update the Company Logo</h4>
+                                <ol class="list-decimal">
+                                    <li>Navigate to <strong>Manage > Location Settings</strong>.</li>
+                                    <li>In the <strong>Branding</strong> section, upload the new logo file.</li>
+                                </ol>
+                                <h4>2.2 How to Update an NDA Document</h4>
+                                <ol class="list-decimal">
+                                    <li>Go to <strong>Visitors > Settings > Sign-in flow</strong> and edit the relevant visitor type.</li>
+                                    <li>In the <strong>Legal Documents</strong> section, paste the new legal text or upload the new PDF.</li>
+                                </ol>
+                                <h4>2.3 How to Edit Sign-in Fields</h4>
+                                <ol class="list-decimal">
+                                    <li>Go to <strong>Visitors > Settings > Sign-in flow</strong> and edit the relevant visitor type.</li>
+                                    <li>Drag and drop fields to reorder them, or click <strong>Add field</strong> to ask for more information.</li>
+                                </ol>
+                                <h3>3. Hardware & Troubleshooting</h3>
+                                <h4>3.1 How to Replace Badge Printer Paper</h4>
+                                <ol class="list-decimal">
+                                    <li>Turn the printer off, open the cover, and remove the empty spool.</li>
+                                    <li>Place the new roll (Model: DK-1202) on the spool, thread it, close the cover, and turn the printer on.</li>
+                                </ol>
+                                <h4>3.2 Common Scenarios & Escalation</h4>
+                                <ul class="list-disc">
+                                    <li><strong>A visitor forgets to sign out:</strong> In the Visitor Log, find their entry and click the <strong>Sign out</strong> button.</li>
+                                    <li><strong>iPad or App is frozen:</strong> Do not hard reset. Create a service ticket with the <strong>IT Department</strong>.</li>
+                                </ul>
+                            </div>
+                            <hr class="my-8">
+                            <!-- IT SOP -->
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900 border-b-2 pb-2">SOP-IT-004: IT - Envoy Technical Administration</h3>
+                                <div class="p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 rounded-r-lg my-4">
+                                    <p><strong>Purpose:</strong> This SOP provides technical instructions for the installation, configuration, and maintenance of the Envoy system hardware and software.</p>
+                                    <p class="mt-2"><strong>Audience:</strong> IT Support, System Administrators, Network Engineers.</p><br>
+                                    <p><strong>Website Login:</strong> https://dashboard.envoy.com/login</p>
+                                </div>
+                                <h3>1. Hardware & Network Configuration</h3>
+                                <h4>1.1 How to Add a Badge Printer (Brother QL-820NWB)</h4>
+                                <ol class="list-decimal">
+                                    <li><strong>Request a static IP address reservation</strong> for the printer's MAC address from the Network team.</li>
+                                    <li>In the Envoy Dashboard, navigate to <strong>Visitors > Devices > Printers</strong>.</li>
+                                    <li>Click <strong>Add Printer</strong>, select the model, enter the static IP, and assign it to a location.</li>
+                                </ol>
+                                <h4>1.2 How to Lock the Envoy App to an iPad (Guided Access)</h4>
+                                <ol class="list-decimal">
+                                    <li>On the iPad, go to <strong>Settings > Accessibility > Guided Access</strong> and turn it ON.</li>
+                                    <li>Set a secure 6-digit PIN and store it in the IT password vault.</li>
+                                    <li>To activate, open the Envoy app and triple-click the Side/Home button.</li>
+                                </ol>
+                                <h3>2. User & Access Management (RBAC)</h3>
+                                <h4>2.1 Understanding Admin Roles</h4>
+                                <ul class="list-disc">
+                                    <li><strong>Global Admin:</strong> Full control. Limited to key IT personnel.</li>
+                                    <li><strong>Location Admin:</strong> Full control over assigned locations. Ideal for Office Managers.</li>
+                                    <li><strong>Front Desk Admin:</strong> Limited, location-specific role. Ideal for reception staff.</li>
+                                </ul>
+                                <h4>2.2 How to Assign or Modify Admin Roles</h4>
+                                <ol class="list-decimal">
+                                    <li>Log in with a Global Admin account and navigate to <strong>Manage > Admins</strong>.</li>
+                                    <li>Click <strong>New admin</strong>, search for the employee, select their role, and assign locations if needed.</li>
+                                </ol>
+                                <h3>3. System Configuration & Data Export</h3>
+                                <h4>3.1 Advanced Configuration</h4>
+                                <p>System-wide changes are managed in <strong>Visitors > Settings</strong>, including Visitor Types, Host Notifications, and Integrations.</p>
+                                <h4>3.2 Accessing and Exporting Data</h4>
+                                <ol class="list-decimal">
+                                    <li>Navigate to <strong>Visitors > Settings > Data & Privacy</strong>.</li>
+                                    <li>Select <strong>Export visitor data</strong> and define a date range. The data will be emailed as a CSV file.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+
+</body>
+</html>

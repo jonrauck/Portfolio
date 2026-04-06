@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jonathan Rauckhorst | Operations Professional</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind to use custom colors and plugins -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-navy': '#111827',
+                        'primary-blue': '#2563eb',
+                        'light-gray-bg': '#f8fafc',
+                    },
+                },
+            },
+        }
+    </script>
+    <!-- Load Inter font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Load Font Awesome for Case Study Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom styles for portfolio and merged case studies */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Blinking light animation */
+        @keyframes blink {
+            50% { opacity: 0.2; }
+        }
+        .blinking-light {
+            animation: blink 1.5s infinite;
+        }
+
+        /* Styles for collapsible sections (details/summary) */
+        summary .chevron { transition: transform 0.2s; }
+        details[open] summary .chevron { transform: rotate(90deg); }
+
+        /* Styles for Fishbone and Workflow diagrams */
+        .fishbone { display: flex; align-items: center; justify-content: center; width: 100%; padding: 2rem 0; }
+        .fishbone-body { display: flex; flex-direction: column; width: 100%; max-width: 900px; }
+        .fishbone-ribs-top, .fishbone-ribs-bottom { display: flex; justify-content: space-around; width: 100%; }
+        .fishbone-spine { display: flex; align-items: center; width: 100%; height: 4px; background-color: #1f2937; margin: 2rem 0; }
+        .fishbone-head { background-color: #4f46e5; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-weight: bold; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); white-space: nowrap; margin-left: auto; }
+        .fishbone-category { position: relative; text-align: center; flex: 1; min-width: 150px; padding: 0 0.5rem; }
+        .fishbone-ribs-top .fishbone-category { padding-bottom: 2.5rem; }
+        .fishbone-ribs-bottom .fishbone-category { padding-top: 2.5rem; }
+        .fishbone-ribs-top .fishbone-category::after, .fishbone-ribs-bottom .fishbone-category::before { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 2px; height: 2.5rem; background-color: #4b5563; }
+        .fishbone-ribs-top .fishbone-category::after { bottom: 0; }
+        .fishbone-ribs-bottom .fishbone-category::before { top: 0; }
+        .fishbone-category h4 { font-weight: bold; color: #11182c; margin-bottom: 0.5rem; }
+        .fishbone-category ul { list-style-type: none; padding: 0; text-align: left; font-size: 0.875rem; color: #4b5563; }
+        .fishbone-category ul li { position: relative; padding-left: 1rem; margin-bottom: 0.25rem; }
+        .fishbone-category ul li:before { content: ''; position: absolute; left: 0; top: 0.6em; width: 8px; height: 1px; background: #6b7280; }
+        .workflow-container { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 1.5rem; }
+        .workflow-step, .workflow-end { padding: 0.75rem 1.5rem; border-radius: 0.375rem; text-align: center; font-weight: 500; position: relative; width: 90%; max-width: 400px; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06); }
+        .workflow-step { background-color: #e0e7ff; border: 1px solid #c7d2fe; color: #3730a3; } /* Indigo */
+        .workflow-end { background-color: #d1fae5; border: 1px solid #a7f3d0; color: #047857; } /* Green */
+        .workflow-arrow { width: 2px; height: 2rem; background-color: #9ca3af; position: relative; }
+        .workflow-arrow::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #9ca3af; }
+
+        /* Styles for Swimlane diagrams */
+        .swimlane { flex: 1; background-color: #ffffff; border-radius: 0.5rem; padding: 0.75rem; border: 1px solid #d1d5db; }
+        .swimlane-header { font-weight: 700; text-align: center; padding: 0.75rem; border-radius: 0.375rem 0.375rem 0 0; font-size: 0.9rem; }
+        .task-box { padding: 0.75rem; border-radius: 0.375rem; font-size: 0.9rem; border: 1px solid #e5e7eb; }
+        .document-content ul, .document-content ol { margin-left: 1.5rem; margin-bottom: 1.5rem; list-style-position: outside; }
+        .document-content li { margin-bottom: 0.75rem; padding-left: 0.5rem; }
+        
+        /* Styles for tables in case studies */
+        .sow-table th, .sow-table td, .scorecard-table th, .scorecard-table td { border: 1px solid #e2e8f0; padding: 0.75rem 1rem; }
+        .sow-table th, .scorecard-table th { background-color: #f8fafc; font-weight: 600; color: #374151; }
+        .scorecard-table { width: 100%; margin-top: 1.5rem; border-collapse: collapse; }
+        .scorecard-table td { vertical-align: top; }
+
+        /* Set scroll-padding-top for modal content */
+        .modal-scroll-content {
+            scroll-padding-top: calc(var(--sticky-nav-height, 0px) + 1.5rem);
+        }
+    </style>
+</head>
+<body class="font-inter text-gray-700 bg-light-gray-bg">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4">
+            <nav class="flex justify-between items-center py-4">
+                <a href="#home" class="text-xl md:text-2xl font-bold text-gray-900">Jonathan Rauckhorst</a>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#about" class="font-medium transition-colors hover:text-primary-blue">About</a>
+                    <a href="#services" class="font-medium transition-colors hover:text-primary-blue">Services</a>
+                    <a href="#portfolio" class="font-medium transition-colors hover:text-primary-blue">Portfolio</a>
+                    <a href="#skills" class="font-medium transition-colors hover:text-primary-blue">Skills</a>
+                    <a href="#experience" class="font-medium transition-colors hover:text-primary-blue">Experience</a>
+                    <a href="#contact" class="bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 transition-colors">Contact</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden" aria-label="Open main menu">
+                    <i data-lucide="menu"></i>
+                </button>
+            </nav>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pb-4">
+            <a href="#about" class="block py-2 font-medium transition-colors hover:text-primary-blue">About</a>
+            <a href="#services" class="block py-2 font-medium transition-colors hover:text-primary-blue">Services</a>
+            <a href="#portfolio" class="block py-2 font-medium transition-colors hover:text-primary-blue">Portfolio</a>
+            <a href="#skills" class="block py-2 font-medium transition-colors hover:text-primary-blue">Skills</a>
+            <a href="#experience" class="block py-2 font-medium transition-colors hover:text-primary-blue">Experience</a>
+            <a href="#contact" class="block mt-2 bg-blue-600 text-white px-4 py-2 rounded-md font-medium text-center">Contact</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Home / Landing Page -->
+        <section id="home" class="bg-dark-navy text-white py-20 md:py-32">
+            <div class="container mx-auto px-4">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="text-center md:text-left">
+                        <h1 class="text-4xl md:text-6xl font-bold leading-tight">I Build Smarter, More Efficient Businesses.</h1>
+                        <p class="mt-6 text-lg md:text-xl text-gray-300">I take a holistic approach to operational improvement, using process redesign and modern IT solutions to simplify complexity, empower your teams, and achieve measurable results.</p>
+                        <div class="mt-8 flex justify-center md:justify-start space-x-4">
+                            <a href="#portfolio" class="bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition-colors text-lg">View My Work</a>
+                            <a href="#contact" class="bg-gray-700 text-white px-6 py-3 rounded-md font-semibold hover:bg-gray-600 transition-colors text-lg">Let's Connect</a>
+                        </div>
+                        <div class="mt-12 flex justify-center md:justify-start items-center space-x-6">
+                            <div class="flex items-center space-x-2">
+                                <i data-lucide="shield-check" class="text-yellow-500"></i>
+                                <span class="font-medium">Six Sigma Yellow Belt</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i data-lucide="check-circle" class="text-purple-400"></i>
+                                <span class="font-medium">ClickUp Certified</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i data-lucide="cpu" class="text-yellow-400"></i>
+                                <span class="font-medium">Google Workspace Pro</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <img src="images/HeadshotSuit.png" alt="Professional Headshot of Jonathan Rauckhorst" class="rounded-full border-8 border-gray-700 shadow-2xl w-64 h-64 md:w-80 md:h-80 object-cover" onerror="this.onerror=null;this.src='images/HeadshotSuit.png';">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Me / My Approach -->
+        <section id="about" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">A Foundation for Sustainable Growth</h2>
+                    <p class="mt-4 text-lg max-w-3xl mx-auto">I build systems that empower teams, streamline processes, and drive sustainable growth.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12 items-start">
+                    <!-- Left Column: Narrative -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-4">A Journey Across Industries</h3>
+                        <p class="mb-4">My lifelong curiosity for how things work has always driven me from taking apart gadgets as a kid to re-engineering complex business operations today. My professional foundation in operational strategy started through my BBA in MIS, which ultimately taught me to look beyond the immediate problem. In IT, I applied lessons to streamline digital workflows and infrastructure. While in construction, I learned the critical importance of resource management and real-world efficiency.</p> 
+                        <p>Now, to further my improvement skills, I'm integrating that experience with my studies in Lean Six Sigma and an exploration of modern tools like AI, focusing on how emerging technology can solve age-old operational challenges in new and powerful ways.</p>
+                        <div class="mt-8 pt-6 border-t border-gray-200">
+                            <h3 class="text-2xl font-semibold text-gray-900 mb-4">A Modern Approach to Building</h3>
+                            <p class="text-gray-700">I believe the best results come from combining proven methodologies with a curiosity for emerging technology. That's why, as I further my understanding of AI, I decided to build this portfolio from scratch as a passion project. Guided by my prompt engineering and strategic direction, it was a hands-on way to explore how modern tools can accelerate creation and solve complex problems—a skill I'm also applying to process automations with platforms like Make.com.</p>
+                        </div>
+                    </div>
+                    <!-- Right Column: Benefits (Operational Philosophy) -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-6">How I Deliver Results</h3>
+                        <div class="space-y-6">
+                            <div class="bg-light-gray-bg p-6 rounded-lg">
+                                <div class="flex items-start">
+                                    <i data-lucide="users" class="text-blue-600 mr-4 mt-1 flex-shrink-0 w-8 h-8"></i>
+                                    <div>
+                                        <strong class="text-lg font-semibold text-gray-800 block">Empowered Teams, Not Overwhelmed Ones</strong>
+                                        <p class="mt-1">I design intuitive systems that your team will actually want to use. The result is less friction, higher adoption, and more time spent on meaningful work, not on fighting with software.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-light-gray-bg p-6 rounded-lg">
+                                <div class="flex items-start">
+                                    <i data-lucide="scaling" class="text-blue-600 mr-4 mt-1 flex-shrink-0 w-8 h-8"></i>
+                                    <div>
+                                        <strong class="text-lg font-semibold text-gray-800 block">Systems That Grow With You</strong>
+                                        <p class="mt-1">The processes we implement today won't break tomorrow. I build flexible, scalable frameworks that handle increased complexity, so your operations are a growth asset, not a liability.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-light-gray-bg p-6 rounded-lg">
+                                <div class="flex items-start">
+                                    <i data-lucide="database-zap" class="text-blue-600 mr-4 mt-1 flex-shrink-0 w-8 h-8"></i>
+                                    <div>
+                                        <strong class="text-lg font-semibold text-gray-800 block">Clarity Through Data</strong>
+                                        <p class="mt-1">We'll replace guesswork with certainty. I help you identify and track the right metrics to pinpoint exact problems, measure the impact of our changes, and make decisions based on facts, not assumptions.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services / Offerings -->
+        <section id="services" class="py-16 md:py-24">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Your Blueprint for Operational Success</h2>
+                    <p class="mt-4 text-lg max-w-3xl mx-auto">Tailored solutions to optimize your operations and unlock your team's potential.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Service Card 1 -->
+                    <div class="bg-white p-8 rounded-lg shadow-md flex flex-col">
+                        <i data-lucide="file-cog" class="w-12 h-12 text-blue-600 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">End the "Who's Doing What?" Confusion</h3>
+                        <p class="flex-grow">When roles and responsibilities are unclear, projects stall and accountability suffers. I specialize in mapping your core business processes and creating detailed Scopes of Work (SOWs) and workflows that define ownership at every step. <strong>We'll eliminate ambiguity and build a system where everyone knows their part.</strong></p>
+                    </div>
+                    <!-- Service Card 2 -->
+                    <div class="bg-white p-8 rounded-lg shadow-md flex flex-col">
+                        <i data-lucide="zap" class="w-12 h-12 text-blue-600 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Get More From The Tools You Already Pay For</h3>
+                        <p class="flex-grow">Is your software empowering your team or just causing frustration? I'll conduct a full audit of your tech stack to identify redundancies, eliminate costly unused licenses, and find critical integration gaps. From there, we'll create a clear plan to select and implement intuitive tools <strong>that your employees will genuinely want to adopt.</strong></p>
+                    </div>
+                    <!-- Service Card 3 -->
+                    <div class="bg-white p-8 rounded-lg shadow-md flex flex-col">
+                        <i data-lucide="search" class="w-12 h-12 text-blue-600 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Drive Your Key Projects to Completion</h3>
+                        <p class="flex-grow">Facing a new technology rollout, a process overhaul, or another complex initiative? I provide hands-on project leadership to ensure your goals are met. With deep experience in managing vendors, coordinating contractors, and handling purchasing, <strong>I can step in to drive your key projects to a successful completion.</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio / Case Studies -->
+        <section id="portfolio" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Proven Results in Action</h2>
+                    <p class="mt-4 text-lg max-w-3xl mx-auto">Concrete examples of operational challenges I've solved and the value I've delivered.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-8">
+                    <!-- Case Study 1: Subcontractor Vetting -->
+                    <div class="case-study-card bg-gray-50 rounded-lg shadow-sm overflow-hidden group md:col-span-2 lg:col-span-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                        <img src="https://placehold.co/600x400/e0e7ff/3730a3?text=Construction" alt="Professionals reviewing documents on a tablet at a construction site" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e0e7ff/3730a3?text=Image+Error';">
+                        <div class="p-6">
+                            <span class="text-sm font-semibold text-blue-600">CONSTRUCTION OPERATIONS</span>
+                            <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">Subcontractor Vetting & Onboarding</h3>
+                            <p class="mb-4">Designed a scalable system to mitigate risk and ensure quality by standardizing subcontractor sourcing, vetting, and onboarding.</p>
+                            <button data-modal-target="case-study-modal-1" class="font-semibold text-blue-600 hover:underline">View Case Study <i data-lucide="arrow-right" class="inline-block w-4 h-4 ml-1"></i></button>
+                        </div>
+                    </div>
+                    <!-- Case Study 2 -->
+                    <div class="case-study-card bg-gray-50 rounded-lg shadow-sm overflow-hidden group md:col-span-2 lg:col-span-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                        <img src="https://placehold.co/600x400/dcfce7/15803d?text=Digital+HQ" alt="A computer screen showing an organized digital file structure" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/dcfce7/15803d?text=Image+Error';">
+                        <div class="p-6">
+                            <span class="text-sm font-semibold text-emerald-600">BUSINESS OPERATIONS</span>
+                            <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">Building a Digital HQ</h3>
+                            <p class="mb-4">Eliminated information silos and reclaimed 10+ hours of wasted team time per week by implementing a unified digital workspace.</p>
+                            <button data-modal-target="case-study-modal-2" class="font-semibold text-emerald-600 hover:underline">View Case Study <i data-lucide="arrow-right" class="inline-block w-4 h-4 ml-1"></i></button>
+                        </div>
+                    </div>
+                    <!-- Case Study 3 -->
+                    <div class="case-study-card bg-gray-50 rounded-lg shadow-sm overflow-hidden group md:col-span-2 lg:col-span-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                        <img src="https://placehold.co/600x400/ffedd5/c2410c?text=IT+Ops" alt="An IT professional analyzing data on multiple computer screens" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/ffedd5/c2410c?text=Image+Error';">
+                        <div class="p-6">
+                            <span class="text-sm font-semibold text-orange-600">IT OPERATIONS</span>
+                            <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">Strategic Tech Consolidation</h3>
+                            <p class="mb-4">Cut annual telecom and software spend by over $55,000 through strategic consolidation and eliminating redundancies.</p>
+                            <button data-modal-target="case-study-modal-3" class="font-semibold text-orange-600 hover:underline">View Case Study <i data-lucide="arrow-right" class="inline-block w-4 h-4 ml-1"></i></button>
+                        </div>
+                    </div>
+                    <!-- Case Study 4 -->
+                    <div class="case-study-card bg-gray-50 rounded-lg shadow-sm overflow-hidden group md:col-span-2 lg:col-span-2 lg:col-start-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                        <img src="https://placehold.co/600x400/fce7f3/be185d?text=Automation" alt="A professional woman using a tablet in a modern office lobby for check-in" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/fce7f3/be185d?text=Image+Error';">
+                        <div class="p-6">
+                            <span class="text-sm font-semibold text-pink-600">PROCESS AUTOMATION</span>
+                            <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">Streamlined Visitor Check-in</h3>
+                            <p class="mb-4">Enhanced security and saved 45+ hours per week in administrative time by implementing a modern visitor management system.</p>
+                            <button data-modal-target="case-study-modal-4" class="font-semibold text-pink-600 hover:underline">View Case Study <i data-lucide="arrow-right" class="inline-block w-4 h-4 ml-1"></i></button>
+                        </div>
+                    </div>
+                    <!-- Case Study 5 -->
+                    <div class="case-study-card bg-gray-50 rounded-lg shadow-sm overflow-hidden group md:col-span-2 md:col-start-2 lg:col-span-2 lg:col-start-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                        <img src="https://placehold.co/600x400/cffafe/0891b2?text=Field+Ops" alt="A technician working on network equipment in an industrial setting" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cffafe/0891b2?text=Image+Error';">
+                        <div class="p-6">
+                            <span class="text-sm font-semibold text-cyan-600">FIELD OPERATIONS</span>
+                            <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">Remote Team Tech Overhaul</h3>
+                            <p class="mb-4">Eliminated downtime and improved safety for R&D field teams with a custom remote camera and asset management solution.</p>
+                            <button data-modal-target="case-study-modal-5" class="font-semibold text-cyan-600 hover:underline">View Case Study <i data-lucide="arrow-right" class="inline-block w-4 h-4 ml-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills & Expertise -->
+        <section id="skills" class="py-16 md:py-24">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Core Competencies</h2>
+                    <p class="mt-4 text-lg max-w-3xl mx-auto">A versatile toolkit of methodologies, software proficiency, and operational skills.</p>
+                </div>
+                <div class="flex flex-col md:flex-row justify-center items-start gap-8 md:gap-16 lg:gap-24 text-center md:text-left">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center justify-center md:justify-start"><i data-lucide="workflow" class="mr-2 text-blue-600"></i>Methodologies</h3>
+                        <ul class="space-y-2">
+                            <li>Six Sigma (Yellow Belt Certified)</li>
+                            <li>Lean Principles</li>
+                            <li>Process Analysis & Mapping</li>
+                            <li>Workflow Design & Optimization</li>
+                            <li>SOP Development</li>
+                            <li>Root Cause Analysis (RCA)</li>
+                            <li>Change Management</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center justify-center md:justify-start"><i data-lucide="cuboid" class="mr-2 text-blue-600"></i>Software & Tools</h3>
+                        <ul class="space-y-2">
+                            <li><strong>ClickUp (Certified)</strong></li>
+                            <li><strong>Google Workspace</strong></li>
+                            <li>Microsoft Office Suite</li>
+                            <li>Diagramming Tools (Lucidchart)</li>
+                            <li>Communication Platforms (MS Teams, Zoom, Google Meet)</li>
+                            <li>Google Gemini</li>
+                            <li>Tally.so Forms</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center justify-center md:justify-start"><i data-lucide="puzzle" class="mr-2 text-blue-600"></i>Operational Skills</h3>
+                        <ul class="space-y-2">
+                            <li>Project Management</li>
+                            <li>System Implementation</li>
+                            <li>Data Collection & Reporting</li>
+                            <li>Cross-functional Collaboration</li>
+                            <li>Strategic Problem-Solving</li>
+                            <li>Client & Stakeholder Relations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience / Career Highlights -->
+        <section id="experience" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Career Highlights</h2>
+                    <p class="mt-4 text-lg max-w-3xl mx-auto">A history of driving operational success in diverse environments.</p>
+                </div>
+                <div class="max-w-3xl mx-auto">
+                    <div class="relative border-l-2 border-blue-200 pl-8 space-y-12">
+                        <!-- Job 1 -->
+                        <div class="relative">
+                            <div class="absolute -left-10 top-1.5 w-4 h-4 bg-blue-600 rounded-full border-4 border-white"></div>
+                            <p class="text-sm font-medium text-blue-600">Jan 2022 - Present</p>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Construction Operations Manager</h3>
+                            <p class="font-medium text-gray-600">Rauck Built LLC | Co-founder</p>
+                            <p class="mt-3">As Co-founder, I established and consistently improved the company's operational framework. Utilizing Lean Six Sigma principles, I developed and implemented key SOPs and SOWs that governed contractor management and project workflows. This systematic approach was critical in managing investment property renovations to yield 25-35% profit margins and in securing over 20% in vendor contract savings. The deployment of ClickUp and Google Workspace further enhanced these processes, creating a streamlined system for communication and project tracking that markedly increased efficiency.</p>
+                        </div>
+                        <!-- Job 2 -->
+                        <div class="relative">
+                            <div class="absolute -left-10 top-1.5 w-4 h-4 bg-blue-600 rounded-full border-4 border-white"></div>
+                            <p class="text-sm font-medium text-blue-600">May 2019 - Jan 2022</p>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Technology Operations Coordinator</h3>
+                            <p class="font-medium text-gray-600">Energy Recovery, Inc.</p>
+                            <p class="mt-3">As TOC, I executed the installation of all IT systems for a new R&D facility. This complex project involved managing vendors and deploying systems for networking, security, and 7 high-tech meeting rooms. Concurrently, I provided dedicated IT support for over 180 users, including C-suite executives, and pioneered key efficiency projects, including a digital visitor system that reclaimed 45+ administrative hours weekly and a telecom audit that yielded $56K in annual savings.</p>
+                        </div>
+                        <!-- Job 3 -->
+                        <div class="relative">
+                            <div class="absolute -left-10 top-1.5 w-4 h-4 bg-blue-600 rounded-full border-4 border-white"></div>
+                            <p class="text-sm font-medium text-blue-600">Oct 2018 - May 2019</p>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Solutions Engineering Support</h3>
+                            <p class="font-medium text-gray-600">Hewlett Packard Enterprise | Contract</p>
+                            <p class="mt-3">As a contractor, I worked within a cross-functional team to provide timely resolutions for customer hardware and software issues. My responsibilities included comprehensive testing to improve system reliability and clear communication with both technical and non-technical stakeholders to ensure alignment on solutions.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Education Section -->
+                <div class="max-w-3xl mx-auto mt-16 text-center">
+                    <h3 class="text-2xl font-bold text-gray-900">Education</h3>
+                    <div class="mt-4">
+                        <p class="text-lg font-semibold text-gray-800">C.T. Bauer College of Business, University of Houston</p>
+                        <p class="text-md text-gray-600">B.B.A in Management Information Systems, May 2018</p>
+                    </div>
+                    <div class="mt-8">
+                        <a href="./Jonathan_Rauckhorst_Resume.pdf" download="Jonathan_Rauckhorst_Resume.pdf" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition-colors">
+                            <i data-lucide="download" class="inline-block w-5 h-5 mr-2 -mt-1"></i>
+                            Download Resume
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 md:py-24">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Ready to Optimize Your Operations?</h2>
+                    <p class="mt-4 text-lg max-w-3xl mx-auto">Let's connect. I'm available for freelance consulting and open to new employment opportunities.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <!-- Contact Me Card -->
+                    <div class="bg-white p-8 rounded-lg shadow-md flex flex-col items-center text-center">
+                        <i data-lucide="mail" class="w-12 h-12 text-blue-600 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Contact Me</h3>
+                        <p class="text-gray-700 mb-4">Feel free to reach out directly if you have any questions or specific inquiries. I'm here to help!</p>
+                        <button data-modal-target="contact-form-modal" class="mt-auto bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition-colors text-lg w-full">
+                            Send a Message
+                        </button>
+                    </div>
+
+                    <!-- Setup Meeting Card -->
+                    <div class="bg-white p-8 rounded-lg shadow-md flex flex-col items-center text-center">
+                        <i data-lucide="calendar" class="w-12 h-12 text-blue-600 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Schedule a Meeting</h3>
+                        <p class="text-gray-700 mb-4">Want a more in-depth discussion? Easily book a virtual appointment directly on my calendar.</p>
+                        <button data-modal-target="meeting-schedule-modal" class="mt-auto bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition-colors text-lg w-full">
+                            Book an Appointment
+                        </button>
+                    </div>
+
+                    <!-- LinkedIn Card -->
+                    <div class="bg-white p-8 rounded-lg shadow-md flex flex-col items-center text-center">
+                        <i data-lucide="linkedin" class="w-12 h-12 text-blue-600 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Connect on LinkedIn</h3>
+                        <p class="text-gray-700 mb-4">Not ready for a direct chat? Follow my professional journey and connect with me on LinkedIn.</p>
+                        <a href="https://www.linkedin.com/in/jrauck/" target="_blank" rel="noopener noreferrer" class="mt-auto bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition-colors text-lg w-full">
+                            View Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <p>&copy; <span id="copyright-year">2025</span> Jonathan Rauckhorst. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Case Study Modals -->
+    <div id="case-study-modal-1" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="modal-title-1"><div class="modal-container bg-white rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300"><div class="p-6 md:p-8 border-b flex-shrink-0"><div class="flex justify-between items-start"><div><span class="text-sm font-semibold text-blue-600">CONSTRUCTION OPERATIONS</span><h2 id="modal-title-1" class="text-2xl md:text-3xl font-bold text-gray-900 mt-1">Subcontractor Vetting & Onboarding</h2></div><button data-modal-close="case-study-modal-1" class="text-gray-500 hover:text-gray-800 flex-shrink-0 ml-4" aria-label="Close modal"><i data-lucide="x" class="w-8 h-8"></i></button></div></div><div class="overflow-y-auto modal-scroll-content flex-1 bg-slate-50">
+        <!-- Injected Case Study 1 Content -->
+        <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+            <div class="bg-white rounded-2xl shadow-2xl shadow-gray-300/30 overflow-hidden max-w-6xl mx-auto">
+                <header class="p-8 md:p-12 bg-gray-900 text-white relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-gray-900 to-slate-900 opacity-75"></div>
+                    <div class="relative z-10">
+                        <p class="text-sm font-semibold text-indigo-300 uppercase tracking-wider">Operations Consulting Case Study</p>
+                        <h1 class="text-4xl md:text-5xl font-extrabold mt-2 text-white">Operations Transformation: Construction & Real Estate</h1>
+                        <p class="mt-4 text-lg text-gray-300 max-w-3xl">Client: Confidential | Industry: Construction & Real Estate Investment</p>
+                    </div>
+                </header>
+                <div class="p-8 md:p-12 space-y-16">
+                    <section id="summary-cs1">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-rocket mr-3 text-indigo-600"></i>1.0 Executive Summary</h2>
+                        <div class="mt-4 border-l-4 border-indigo-500 pl-6 text-gray-700 leading-relaxed">
+                            <p>A leading construction and real estate investment firm faced operational bottlenecks and significant project risks due to a lack of standardized subcontractor management. This case study outlines the strategic implementation of a comprehensive operations framework, leveraging Lean Six Sigma principles and modern project management tools. The initiative transformed a reactive, ad-hoc process into a proactive, scalable system, resulting in a <strong>90% reduction in preventable risk</strong>, a <strong>50% decrease in sourcing time</strong>, and the establishment of a robust foundation for sustainable growth and profitability across both new construction and property renovation ventures.</p>
+                        </div>
+                    </section>
+                    <section id="challenge-cs1">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-exclamation-triangle mr-3 text-indigo-600"></i>2.0 Define: The Challenge</h2>
+                        <p class="mt-4 text-gray-700 mb-4">The profitability and timeline of any construction or renovation project hinge on the quality and reliability of its subcontractors. The client's existing process for sourcing and managing trades was informal and undocumented, leading to several critical business challenges:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><strong>High Risk Exposure:</strong> Inconsistent vetting exposed the company to financial and legal risks from uninsured or unqualified subcontractors, potential for rework, and reputational damage.</li>
+                            <li><strong>Operational Inefficiency:</strong> The ad-hoc search for talent for each new project was time-consuming, non-scalable, and heavily reliant on institutional knowledge rather than documented process.</li>
+                            <li><strong>Unreliable ROI Projections:</strong> For investment properties, inconsistent subcontractor bids made it difficult to reliably forecast renovation costs, threatening the profitability of fix-and-flip projects.</li>
+                            <li><strong>Scope Creep & Budget Overruns:</strong> Vague agreements and the absence of a standardized Scope of Work (SOW) process frequently resulted in project delays and budget inconsistencies.</li>
+                        </ul>
+                    </section>
+                    <section id="solution-cs1">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-lightbulb mr-3 text-indigo-600"></i>3.0 Improve & Control: The Solution</h2>
+                        <p class="mt-4 text-gray-700 mb-4">To address the identified issues, I designed and implemented a multi-faceted operational framework. This solution was not just a one-time fix but a system designed for control and continuous improvement.</p>
+                        <ol class="list-decimal list-outside mt-4 space-y-4 pl-5 text-gray-700">
+                            <li><strong>Developed a Data-Driven Subcontractor Vetting Scorecard:</strong> Moving beyond subjective evaluation, I created a weighted scorecard to objectively assess potential partners. This tool quantifies risk by evaluating critical criteria: business stability, insurance coverage, licensing, legal history, and past performance. This standardized the "Measure" phase of the process.</li>
+                            <li><strong>Implemented a Centralized Subcontractor CRM:</strong> I configured a relational database within ClickUp to serve as a single source of truth. This "Approved Supplier List" tracks all vetted subs, their specialties, contact information, documentation (insurance certificates, licenses), and post-project performance scores, creating a scalable, long-term asset.</li>
+                            <li><strong>Authored a Formal Standard Operating Procedure (SOP) & Scope of Work (SOW) Template:</strong> To ensure process adherence and clarity, I documented the end-to-end subcontractor lifecycle in a formal SOP. This was paired with a standardized SOW template that clearly defines deliverables, timelines, payment schedules, and quality standards, effectively mistake-proofing the engagement process. This established the "Control" phase.</li>
+                        </ol>
+                    </section>
+                    <section id="results-cs1">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-chart-pie mr-3 text-indigo-600"></i>4.0 Analyze: The Results & ROI</h2>
+                        <p class="mt-4 text-gray-700 mb-6">The implementation of this new operational system yielded immediate, measurable, and strategic results, directly impacting the company's risk profile, efficiency, and scalability.</p>
+                        <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+                            <div class="bg-green-100 p-6 rounded-lg border border-green-200"><h3 class="text-5xl font-extrabold text-green-700">90%</h3><p class="mt-2 font-semibold text-gray-800">Reduction in Preventable Risk</p></div>
+                            <div class="bg-indigo-100 p-6 rounded-lg border border-indigo-200"><h3 class="text-5xl font-extrabold text-indigo-700">50%</h3><p class="mt-2 font-semibold text-gray-800">Reduction in Sourcing Time</p></div>
+                            <div class="bg-purple-100 p-6 rounded-lg border border-purple-200"><h3 class="text-5xl font-extrabold text-purple-700">100%</h3><p class="mt-2 font-semibold text-gray-800">Process Adherence</p></div>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mt-8 mb-3">Strategic Impact:</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><strong>Foundation for Scalable Growth:</strong> The client now possesses a repeatable system, enabling them to confidently take on more complex projects without a proportional increase in administrative overhead.</li>
+                            <li><strong>Accelerated Investment Cycles:</strong> For property investors, the streamlined system reduces the time-to-market for renovated properties by ensuring reliable contractor availability and minimizing rework delays.</li>
+                            <li><strong>Enhanced Brand Reputation:</strong> A commitment to a rigorous vetting process enhances the company's reputation for quality and reliability among clients, lenders, and high-caliber trades.</li>
+                            <li><strong>Data-Driven Decision Making:</strong> The system provides a framework for continuous improvement, allowing for performance analysis of subcontractors over time to optimize future selections.</li>
+                        </ul>
+                    </section>
+                    <div class="mt-12">
+                        <details class="border border-gray-200 rounded-lg bg-white overflow-hidden" open>
+                            <summary class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                <h3 class="text-xl font-semibold text-gray-800 flex items-center"><i class="fas fa-cogs mr-3 text-indigo-600"></i>Key Deliverable: Standard Operating Procedure (SOP)</h3>
+                                <span class="chevron text-indigo-600 transform transition-transform duration-200 text-2xl font-light">&rsaquo;</span>
+                            </summary>
+                            <div class="p-6 border-t border-gray-200 text-gray-700 space-y-8">
+                                <div>
+                                    <h4 class="text-2xl font-bold text-gray-900 border-b-2 pb-2">SOP: Subcontractor Lifecycle Management</h4>
+                                    <p class="text-sm mt-2"><strong>SOP ID:</strong> CM-OPS-001 | <strong>Version:</strong> 1.0 | <strong>Owner:</strong> Operations Manager | <strong>Review Cycle:</strong> Annual</p>
+                                    <h5 class="text-lg font-semibold text-gray-800 mt-6 mb-2">1.0 Purpose & Scope</h5>
+                                    <p><strong>Purpose:</strong> To establish a standardized, risk-mitigated, and scalable process for the full lifecycle management of subcontractors, from initial sourcing to project completion and performance evaluation.</p>
+                                    <h5 class="text-lg font-semibold text-gray-800 mt-6 mb-2">2.0 Roles & Responsibilities (RACI Chart)</h5>
+                                    <div class="overflow-x-auto">
+                                        <table class="scorecard-table text-sm">
+                                            <thead><tr><th>Process Step</th><th>Project Manager</th><th>Operations Manager</th><th>Principal/Investor</th></tr></thead>
+                                            <tbody>
+                                                <tr><td>Define Subcontractor Needs</td><td class="text-center font-bold">R</td><td class="text-center font-bold">A</td><td class="text-center font-bold">C</td></tr>
+                                                <tr><td>Source Candidates (CRM/External)</td><td class="text-center font-bold">R</td><td class="text-center font-bold">S</td><td class="text-center font-bold">I</td></tr>
+                                                <tr><td>Conduct Vetting & Scoring</td><td class="text-center font-bold">R</td><td class="text-center font-bold">A</td><td class="text-center font-bold">I</td></tr>
+                                                <tr><td>Final Selection & Approval</td><td class="text-center font-bold">C</td><td class="text-center font-bold">R</td><td class="text-center font-bold">A</td></tr>
+                                                <tr><td>Issue SOW & Onboard</td><td class="text-center font-bold">R</td><td class="text-center font-bold">A</td><td class="text-center font-bold">I</td></tr>
+                                                <tr><td>Performance Review (Post-Project)</td><td class="text-center font-bold">R</td><td class="text-center font-bold">A</td><td class="text-center font-bold">I</td></tr>
+                                            </tbody>
+                                            <tfoot><tr><td colspan="4" class="text-xs p-2 bg-gray-50"><strong>Key:</strong> R = Responsible, A = Accountable, C = Consulted, I = Informed, S = Support</td></tr></tfoot>
+                                        </table>
+                                    </div>
+                                    <h5 class="text-lg font-semibold text-gray-800 mt-6 mb-2">3.0 Procedure</h5>
+                                    <h6 class="font-semibold">Phase 1: Sourcing</h6>
+                                    <ol class="list-decimal space-y-2 list-outside pl-5">
+                                        <li><strong>Define Scope:</strong> Project Manager (PM) finalizes trade requirements based on project plans and client specifications.</li>
+                                        <li><strong>Internal CRM Search (Primary):</strong> PM searches the ClickUp CRM for a vetted subcontractor with a performance rating of 4.0 or higher. This is the preferred sourcing method.</li>
+                                        <li><strong>External Sourcing (Secondary):</strong> If no suitable sub is in the CRM, PM sources new candidates from approved industry networks or referrals, with approval from the Operations Manager.</li>
+                                    </ol>
+                                    <h6 class="font-semibold mt-4">Phase 2: Vetting & Verification (The "Measure" Gate)</h6>
+                                    <ol class="list-decimal space-y-2 list-outside pl-5">
+                                        <li><strong>Request Vetting Packet:</strong> PM requests a standard vetting packet: Certificate of Insurance (COI), W-9, state licenses, 3 trade references, and project portfolio.</li>
+                                        <li><strong>Conduct Due Diligence:</strong> PM verifies all submitted documents via official sources (SOS website, insurance agent call, state license board).</li>
+                                        <li><strong>Complete Vetting Scorecard:</strong> The PM must complete the official Vetting Scorecard. A minimum passing score of 3.5 is required for consideration.</li>
+                                    </ol>
+                                    <h6 class="font-semibold mt-4">Phase 3: Selection & Onboarding (The "Control" Gate)</h6>
+                                    <ol class="list-decimal space-y-2 list-outside pl-5">
+                                        <li><strong>Selection:</strong> Operations Manager makes the final selection based on scorecard results, bid competitiveness, and availability.</li>
+                                        <li><strong>Issue Standardized SOW:</strong> PM drafts a detailed, project-specific Scope of Work using the official template. SOW must be signed by both parties before any work commences.</li>
+                                        <li><strong>CRM Onboarding:</strong> PM uploads all final documentation to the subcontractor's profile in the ClickUp CRM and marks their status as "Approved."</li>
+                                    </ol>
+                                </div>
+                                <hr class="my-8">
+                                <div>
+                                    <h4 class="text-2xl font-bold text-gray-900 border-b-2 pb-2">Subcontractor Vetting Scorecard Template</h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="scorecard-table">
+                                            <thead><tr><th>Vetting Criterion</th><th>Weight</th><th>Score (0-5)</th><th>Weighted Score</th><th class="w-1/3">Verification Notes & Evidence</th></tr></thead>
+                                            <tbody>
+                                                <tr><td><strong>Business Stability & History</strong></td><td class="text-center">20%</td><td></td><td></td><td>SoS Status: [Active/Inactive], Years in Business: [##]</td></tr>
+                                                <tr><td><strong>Insurance & Licensing Compliance</strong></td><td class="text-center">25%</td><td></td><td></td><td>COI Verified w/ [Agent Name]. License #[#####] Verified via [Board].</td></tr>
+                                                <tr><td><strong>Legal & Reputational Check</strong></td><td class="text-center">15%</td><td></td><td></td><td>Courts search: [None / Case #s]. BBB Rating: [Grade]</td></tr>
+                                                <tr><td><strong>Reference Checks (Avg. Score)</strong></td><td class="text-center">15%</td><td></td><td></td><td>Ref 1: [0-5], Ref 2: [0-5], Ref 3: [0-5]. Key feedback noted.</td></tr>
+                                                <tr><td><strong>Relevant Experience / Portfolio Quality</strong></td><td class="text-center">15%</td><td></td><td></td><td>Portfolio demonstrates projects of similar scale/complexity.</td></tr>
+                                                <tr><td><strong>Communication & Professionalism</strong></td><td class="text-center">10%</td><td></td><td></td><td>Responsiveness and clarity during vetting process.</td></tr>
+                                                <tr class="bg-gray-100 font-bold"><td colspan="3" class="text-right p-3">FINAL WEIGHTED SCORE</td><td class="text-center p-3">[Sum]</td><td class="bg-gray-50">Min. Passing Score: 3.5</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="grid md:grid-cols-2 gap-8 mt-6">
+                                        <div>
+                                            <h5 class="text-lg font-semibold text-gray-800">Scoring Key & Instructions</h5>
+                                            <ol class="list-decimal space-y-1 mt-2 text-sm pl-5">
+                                                <li>Score each criterion on a scale of 0-5.</li>
+                                                <li>Multiply the Score by the Weight to get the Weighted Score.</li>
+                                                <li>Sum all Weighted Scores to get the final score.</li>
+                                            </ol>
+                                            <ul class="space-y-1 mt-4 text-sm p-4 bg-gray-50 rounded-md">
+                                                <li><strong>5 (Excellent):</strong> Exceeds all requirements.</li>
+                                                <li><strong>4 (Good):</strong> Meets all requirements.</li>
+                                                <li><strong>3 (Acceptable):</strong> Meets minimum requirements.</li>
+                                                <li><strong>0 (Unacceptable):</strong> Automatic failure (e.g., no insurance).</li>
+                                            </ul>
+                                        </div>
+                                        <div class="bg-gray-50 border border-gray-200 rounded-md p-4">
+                                            <h5 class="text-lg font-semibold text-gray-800">Final Assessment & Approval</h5>
+                                            <p class="mt-4"><strong>Final Score:</strong> __________ / 5.0</p>
+                                            <div class="space-y-2 mt-2 text-sm">
+                                                <p>[&nbsp;] <strong>Approve for CRM:</strong> Score ≥ 4.0.</p>
+                                                <p>[&nbsp;] <strong>Approve with Caution:</strong> 3.5 ≤ Score < 4.0.</p>
+                                                <p>[&nbsp;] <strong>Reject:</strong> Score < 3.5 or critical failure.</p>
+                                            </div>
+                                            <div class="mt-6 border-t pt-4">
+                                                <p><strong>Operations Manager Approval:</strong></p>
+                                                <p class="mt-4">Signature: _____________________ Date: _____________________</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div></div></div>
+    <div id="case-study-modal-2" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="modal-title-2"><div class="modal-container bg-white rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300"><div class="p-6 md:p-8 border-b flex-shrink-0"><div class="flex justify-between items-start"><div><span class="text-sm font-semibold text-emerald-600">BUSINESS OPERATIONS</span><h2 id="modal-title-2" class="text-2xl md:text-3xl font-bold text-gray-900 mt-1">Building a Digital HQ</h2></div><button data-modal-close="case-study-modal-2" class="text-gray-500 hover:text-gray-800 flex-shrink-0 ml-4" aria-label="Close modal"><i data-lucide="x" class="w-8 h-8"></i></button></div></div><div class="overflow-y-auto modal-scroll-content flex-1 bg-slate-50">
+        <!-- Injected Case Study 2 Content -->
+        <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+            <div class="bg-white rounded-2xl shadow-2xl shadow-gray-300/30 overflow-hidden max-w-6xl mx-auto">
+                <header class="p-8 md:p-12 bg-gray-900 text-white relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-gray-900 to-slate-900 opacity-75"></div>
+                    <div class="relative z-10">
+                        <p class="text-sm font-semibold text-indigo-300 uppercase tracking-wider">Operations Consulting Case Study</p>
+                        <h1 class="text-4xl md:text-5xl font-extrabold mt-2 text-white">Digital HQ Transformation</h1>
+                        <p class="mt-4 text-lg text-gray-300 max-w-3xl">Transforming Operational Chaos into a Scalable, Professional Digital Headquarters</p>
+                    </div>
+                </header>
+                <div class="p-8 md:p-12 space-y-16">
+                    <section id="summary-cs2">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-rocket mr-3 text-indigo-600"></i>1.0 Executive Summary</h2>
+                        <div class="mt-6 grid md:grid-cols-3 gap-8 text-gray-700">
+                            <div><h3 class="text-xl font-semibold text-gray-800 mb-2">The Challenge</h3><p>A growing real estate investment firm faced significant operational friction. The absence of a centralized system led to disorganized files, fragmented communication, and a non-professional image (e.g., using @gmail.com addresses), creating unacceptable business risks.</p></div>
+                            <div><h3 class="text-xl font-semibold text-gray-800 mb-2">The Solution</h3><p>I designed and deployed a cost-effective "Digital HQ" using Google Workspace. This involved establishing a professional domain, architecting an intuitive file system to serve as the Single Source of Truth (SSOT), implementing role-based security, and creating empowering SOPs.</p></div>
+                            <div><h3 class="text-xl font-semibold text-gray-800 mb-2">The Impact</h3><p>The project eliminated critical risks, reduced administrative waste by over 95%, and established a scalable foundation for future growth. The firm now operates with enhanced professionalism, security, and efficiency.</p></div>
+                        </div>
+                    </section>
+                    <section id="kpis-cs2">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-tachometer-alt mr-3 text-indigo-600"></i>2.0 Key Performance Indicators (KPIs)</h2>
+                        <div class="mt-6 overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead><tr><th class="p-3 font-semibold bg-gray-100 text-gray-800 rounded-l-lg">Metric</th><th class="p-3 font-semibold bg-gray-100 text-gray-800 text-center">Before Solution</th><th class="p-3 font-semibold bg-gray-100 text-gray-800 text-center">After Solution</th><th class="p-3 font-semibold bg-gray-100 text-gray-800 text-center rounded-r-lg">Improvement</th></tr></thead>
+                                <tbody class="divide-y divide-gray-200 text-gray-700">
+                                    <tr><td class="p-3 font-medium">Time to Retrieve Document</td><td class="p-3 text-center text-red-600">~50+ Minutes</td><td class="p-3 text-center text-green-600">&lt; 1 Minute</td><td class="p-3 text-center font-bold text-green-700">>98% Reduction</td></tr>
+                                    <tr><td class="p-3 font-medium">Rework from Incorrect Versions</td><td class="p-3 text-center text-red-600">High Risk (Hours/Days)</td><td class="p-3 text-center text-green-600">Eliminated</td><td class="p-3 text-center font-bold text-green-700">100% Risk Mitigation</td></tr>
+                                    <tr><td class="p-3 font-medium">System Management</td><td class="p-3 text-center text-red-600">Consultant Dependent</td><td class="p-3 text-center text-green-600">Self-Sufficient</td><td class="p-3 text-center font-bold text-green-700">Empowered Team</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    <section id="analysis-cs2">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-search-dollar mr-3 text-indigo-600"></i>3.0 Lean Six Sigma Analysis: Value Stream Mapping</h2>
+                        <p class="mt-4 text-center text-gray-700 max-w-3xl mx-auto">A Value Stream Map (VSM) of the "before" state revealed significant non-value-added activities (Waste) in the process of finding a project document. The primary wastes identified were <strong class="text-red-600">Waiting</strong>, <strong class="text-red-600">Defects</strong> (using wrong files), and <strong class="text-red-600">Motion</strong> (searching multiple locations).</p>
+                        <div class="mt-8 grid md:grid-cols-2 gap-8">
+                            <div class="border border-red-200 bg-red-50 p-6 rounded-lg"><h4 class="font-bold text-lg text-center mb-4 text-red-800">BEFORE: Disjointed Workflow</h4><div class="space-y-3 text-gray-700"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold">1</div><span>Employee Needs Doc</span></div><div class="pl-10 text-2xl">↓</div><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center font-bold">!</div><span class="text-red-600">Searches Email (Waste: 15min)</span></div><div class="pl-10 text-2xl">↓</div><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center font-bold">!</div><span class="text-red-600">Asks Coworker (Waste: 25min)</span></div><div class="pl-10 text-2xl">↓</div><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-red-700 text-white flex items-center justify-center font-bold">X</div><span class="font-semibold text-red-700">Rework Required (RISK: Hours-Days)</span></div></div></div>
+                            <div class="border border-green-200 bg-green-50 p-6 rounded-lg"><h4 class="font-bold text-lg text-center mb-4 text-green-800">AFTER: Optimized Workflow</h4><div class="space-y-3 text-gray-700"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold">1</div><span>Employee Needs Doc</span></div><div class="pl-10 text-2xl">↓</div><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">2</div><span class="text-green-700">Navigates to Google Drive</span></div><div class="pl-10 text-2xl">↓</div><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">3</div><span class="text-green-700">Finds Correct File Instantly</span></div><div class="pl-10 text-2xl">↓</div><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-green-700 text-white flex items-center justify-center font-bold">✓</div><span class="font-semibold text-green-800">Proceeds with Confidence</span></div></div></div>
+                        </div>
+                    </section>
+                    <section id="architecture-cs2">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-folder-tree mr-3 text-indigo-600"></i>4.0 Deliverable: Information Architecture</h2>
+                        <p class="mt-4 mb-8 text-gray-700">A key deliverable was the design of a scalable and intuitive information architecture. This structure separates company administration from project operations, incorporates role-based access controls, and provides a standardized template for all new projects to ensure consistency.</p>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div><h3 class="text-xl font-semibold text-gray-800 mb-4">Part 1: Company-Wide Directory</h3><div class="bg-gray-100 p-4 rounded-lg font-mono text-sm text-gray-800"><p>📁 [Your Company Name]</p><div class="pl-4"><p class="mt-1">📁 Investment_Properties <span class="text-indigo-600">[All Users]</span></p><p class="mt-1">📁 Operations <span class="text-indigo-600">[All Users]</span></p><p class="mt-1">📁 Company_Admin <span class="text-red-600">[Restricted]</span></p><p class="mt-1">📁 Users <span class="text-purple-600">[Private]</span></p></div></div></div>
+                            <div><h3 class="text-xl font-semibold text-gray-800 mb-4">Part 2: Project Folder Template</h3><div class="bg-gray-100 p-4 rounded-lg font-mono text-sm text-gray-800"><p>📁 [YYYY_Project_Name]</p><div class="pl-4"><p class="mt-1">📁 01_Project_Management</p><p class="mt-1">📁 02_Design</p><p class="mt-1">📁 03_Estimates</p><p class="mt-1">📁 04_Contracts_And_Legal</p><p class="mt-1">📁 05_Financials</p><p class="mt-1">📁 07_Photos_And_Media</p><p class="mt-1">📁 _Archive</p></div></div></div>
+                        </div>
+                    </section>
+                    <div class="mt-12">
+                        <details class="border border-gray-200 rounded-lg bg-white overflow-hidden">
+                            <summary class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100"><h3 class="text-xl font-semibold text-gray-800 flex items-center"><i class="fas fa-file-signature mr-3 text-indigo-600"></i>Sample: Scope of Work (SOW)</h3><span class="chevron text-indigo-600 transform transition-transform duration-200 text-2xl font-light">&rsaquo;</span></summary>
+                            <div class="p-6 border-t border-gray-200 text-gray-700"><table class="w-full mb-6"><tr><td class="font-semibold text-gray-800 w-1/4">Prepared for:</td><td>[Client Company Name]</td></tr><tr><td class="font-semibold text-gray-800">Prepared by:</td><td>Jonathan Rauckhorst, Operations Consultant</td></tr><tr><td class="font-semibold text-gray-800">Date:</td><td>July 17, 2025</td></tr></table><h3 class="text-xl font-bold text-gray-800 mb-2 mt-4">Project: Foundational Operations & Digital HQ Setup</h3><h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">1. Project Overview & Objectives</h4><p>This project will remediate operational inefficiencies by establishing a centralized Digital HQ. Key objectives include deploying Google Workspace for professional identity, implementing a secure and scalable file management system (SSOT), defining role-based access controls, and delivering documentation to ensure client self-sufficiency.</p><h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">2. Scope of Services & Deliverables</h4><div class="overflow-x-auto"><table class="w-full sow-table"><thead><tr><th>Phase</th><th>Description</th><th>Key Deliverables</th></tr></thead><tbody><tr><td><strong>Phase 1: Foundation</strong></td><td>Procure domain, set up Google Workspace, configure core services, and establish user roles.</td><td>1. Secured Domain Name.<br>2. Active Google Workspace with professional emails.<br>3. Defined User Roles (Admin, Member).</td></tr><tr><td><strong>Phase 2: Architecture</strong></td><td>Build out the approved information architecture and apply role-based permissions.</td><td>1. Approved Folder Structure built in Google Drive.<br>2. Role-Based Permissions implemented.</td></tr><tr><td><strong>Phase 3: Empowerment</strong></td><td>Develop a user-friendly SOP and train the client on usage and maintenance.</td><td>1. Comprehensive SOP & User Guide.<br>2. Live Training Session (recorded).<br>3. 30 days of post-launch email support.</td></tr></tbody></table></div><h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">3. Out of Scope</h4><ul class="list-disc pl-6"><li>Website design or development.</li><li>Procurement or management of any software beyond Google Workspace.</li><li>Data entry or migration of existing unorganized files.</li><li>Ongoing IT helpdesk support beyond the specified 30-day period.</li></ul><h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">4. Assumptions</h4><ul class="list-disc pl-6"><li>Client will provide timely access to necessary accounts and information.</li><li>Key stakeholders will be available for scheduled meetings and training.</li><li>Decisions and feedback will be provided within 2 business days of request.</li></ul><h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">5. Project Investment</h4><p>A detailed quote will be provided upon request. Pricing is typically structured as a fixed fee for the total project scope.</p><h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">6. Acceptance Criteria</h4><p>This project will be considered complete upon the client's written confirmation (email sufficient) that all deliverables outlined in Section 2 have been provided and the training session has been concluded.</p></div>
+                        </details>
+                    </div>
+                    <div class="mt-8">
+                        <details class="border border-gray-200 rounded-lg bg-white overflow-hidden" open><summary class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100"><h3 class="text-xl font-semibold text-gray-800 flex items-center"><i class="fas fa-cogs mr-3 text-indigo-600"></i>Sample: Standard Operating Procedure (SOP)</h3><span class="chevron text-indigo-600 transform transition-transform duration-200 text-2xl font-light">&rsaquo;</span></summary><div class="p-6 border-t border-gray-200 text-gray-700"><h3 class="text-xl font-bold text-gray-800 mb-2">SOP: Digital File Management</h3><table class="w-full my-4 text-sm"><tr><td class="font-semibold p-2 bg-gray-50 w-1/4">SOP ID:</td><td class="p-2">OPS-001</td></tr><tr><td class="font-semibold p-2 bg-gray-50">Version:</td><td class="p-2">1.0</td></tr><tr><td class="font-semibold p-2 bg-gray-50">Effective Date:</td><td class="p-2">July 17, 2025</td></tr><tr><td class="font-semibold p-2 bg-gray-50">Owner:</td><td class="p-2">Operations Manager</td></tr></table><h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">1. Purpose & Scope</h4><p>This document outlines the standard procedure for creating, naming, storing, and archiving all digital files within the company's Google Drive. Adherence to this SOP is mandatory for all employees to ensure information integrity and operational efficiency.</p><h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">2. Roles & Responsibilities</h4><ul class="list-disc pl-6"><li><strong>All Users:</strong> Responsible for adhering to the file naming convention and storing files in their correct locations.</li><li><strong>Admin Users (Owner, Assistant):</strong> Responsible for creating new top-level project folders, managing user access, and performing periodic audits.</li></ul><h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">3. The Golden Rules of Filing</h4><ol class="list-decimal pl-6 space-y-4"><li><strong>Always Save to the Cloud.</strong> Never save a final work document only to your computer's desktop. All work must be saved in the appropriate Google Drive folder.</li><li><strong>Use the Project Template.</strong> For every new investment property, an Admin User must duplicate the "[Template] Project_Folder" and rename it according to the standard: <code>YYYY_Project_Name</code>.</li><li><strong>Follow the Naming Convention.</strong> Proper naming is critical for search and version control.<div class="bg-gray-100 p-4 rounded-lg my-4"><p class="font-mono font-semibold">Format: <code>YYYY-MM-DD_Description_vX.X.ext</code></p><ul class="text-sm mt-2 list-disc list-inside"><li><strong>YYYY-MM-DD:</strong> The date the file was created or significantly revised.</li><li><strong>Description:</strong> A clear, concise description (e.g., <code>Katy-Plumbing-Contract</code>).</li><li><strong>vX.X:</strong> The version number (e.g., <code>v1.0</code>, <code>v1.1</code>, <code>v2.0</code>).</li><li><strong>Example:</strong> <code>2025-07-17_Katy-Plumbing-Contract_v1.0.pdf</code></li></ul></div></li><li><strong>Manage Versions Correctly.</strong><ul class="list-disc pl-6"><li>When updating a file, do not overwrite the old one.</li><li><strong>Step 1:</strong> Move the previous version (e.g., `..._v1.0.pdf`) into the `_Archive` folder within that project.</li><li><strong>Step 2:</strong> Save the new file with the incremented version number (e.g., `..._v1.1.pdf`) in the correct working directory.</li><li>This ensures a complete history is preserved while keeping the working directory clean.</li></ul></li></ol></div></details>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div></div></div>
+    <div id="case-study-modal-3" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="modal-title-3"><div class="modal-container bg-white rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300"><div class="p-6 md:p-8 border-b flex-shrink-0"><div class="flex justify-between items-start"><div><span class="text-sm font-semibold text-orange-600">IT OPERATIONS</span><h2 id="modal-title-3" class="text-2xl md:text-3xl font-bold text-gray-900 mt-1">Strategic IT & Telecom Consolidation</h2></div><button data-modal-close="case-study-modal-3" class="text-gray-500 hover:text-gray-800 flex-shrink-0 ml-4" aria-label="Close modal"><i data-lucide="x" class="w-8 h-8"></i></button></div></div><div class="overflow-y-auto modal-scroll-content flex-1 bg-slate-50">
+        <!-- Injected Case Study 3 Content -->
+        <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+            <div class="bg-white rounded-2xl shadow-2xl shadow-gray-300/30 overflow-hidden max-w-6xl mx-auto">
+                <header class="p-8 md:p-12 bg-gray-900 text-white relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-gray-900 to-slate-900 opacity-75"></div>
+                    <div class="relative z-10">
+                        <p class="text-sm font-semibold text-indigo-300 uppercase tracking-wider">Operations Consulting Case Study</p>
+                        <h1 class="text-4xl md:text-5xl font-extrabold mt-2 text-white">Strategic IT & Telecom Consolidation</h1>
+                        <p class="mt-4 text-lg text-gray-300 max-w-3xl">Transforming operational inefficiencies and "tech bloat" into a streamlined, cost-optimized, and governed ecosystem.</p>
+                        <div class="mt-6 flex items-center space-x-4 text-sm text-gray-400"><span>Authored by: J. Rauck, Operations Consultant</span><span>|</span><span>Version: 2.1</span><span>|</span><span>Date: July 17, 2025</span></div>
+                    </div>
+                </header>
+                <div class="p-8 md:p-12 space-y-16">
+                    <section id="summary-cs3">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-rocket mr-3 text-indigo-600"></i>1.0 Executive Summary</h2>
+                        <div class="mt-4 border-l-4 border-indigo-500 pl-6 text-gray-700 leading-relaxed space-y-4">
+                            <p>[Client Company Name] faced significant operational friction and financial waste due to decentralized IT and telecom management. A lack of formal governance resulted in redundant software licensing, poorly optimized mobile fleet plans, and fragmented communication workflows. This "tech bloat" created an administrative burden and an estimated annual overspend exceeding <strong>$55,000</strong>.</p>
+                            <p>This case study details a strategic initiative designed to address these challenges head-on. By applying a structured, data-driven methodology, we successfully consolidated software, optimized telecom contracts, and established a robust governance framework. The project not only achieved <strong>$56,600 in annualized savings</strong> but also reclaimed over <strong>180 administrative hours</strong> and significantly improved operational efficiency and security posture.</p>
+                        </div>
+                    </section>
+                    <section id="problem-cs3">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-bullseye mr-3 text-indigo-600"></i>2.0 Problem Statement & Key Performance Indicators (KPIs)</h2>
+                        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="bg-red-50 border border-red-200 p-6 rounded-lg"><h3 class="font-bold text-lg text-red-800 mb-3">Initial Situation Analysis</h3><ul class="space-y-3 text-red-900"><li class="flex items-start"><span class="font-bold mr-2 text-red-600">✗</span>Decentralized procurement with no oversight.</li><li class="flex items-start"><span class="font-bold mr-2 text-red-600">✗</span>Multiple communication platforms causing user confusion.</li><li class="flex items-start"><span class="font-bold mr-2 text-red-600">✗</span>No process for decommissioning legacy systems.</li><li class="flex items-start"><span class="font-bold mr-2 text-red-600">✗</span>Reactive, manual management of telecom plans.</li></ul></div>
+                            <div class="bg-green-50 border border-green-200 p-6 rounded-lg"><h3 class="font-bold text-lg text-green-800 mb-3">Project Goals & Target KPIs</h3><ul class="space-y-3 text-green-900"><li class="flex items-start"><span class="font-bold mr-2 text-green-600">✓</span>Reduce annual IT/telecom spend by at least 5%.</li><li class="flex items-start"><span class="font-bold mr-2 text-green-600">✓</span>Establish a formal IT Governance Policy (SOP).</li><li class="flex items-start"><span class="font-bold mr-2 text-green-600">✓</span>Implement a yearly software performance review process.</li></ul></div>
+                        </div>
+                    </section>
+                    <section id="methodology-cs3">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-sitemap mr-3 text-indigo-600"></i>3.0 Project Methodology: A Lean Six Sigma Approach</h2>
+                        <p class="mt-4 text-gray-700 leading-relaxed">To ensure a structured, repeatable, and data-driven outcome, the project followed the DMAIC (Define, Measure, Analyze, Improve, Control) framework, a cornerstone of Lean Six Sigma for process improvement.</p>
+                        <div class="mt-8 space-y-8">
+                            <div class="flex items-start"><div class="flex-shrink-0 h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">D</div><div class="ml-6"><h3 class="text-xl font-semibold text-gray-800">Define: Chartering the Project (Week 1)</h3><p class="mt-1 text-gray-700">Formalized the project's purpose and scope. A Project Charter and high-level Scope of Work (SOW) were created, outlining objectives, stakeholders, and the KPIs listed above.</p></div></div>
+                            <div class="flex items-start"><div class="flex-shrink-0 h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">M</div><div class="ml-6"><h3 class="text-xl font-semibold text-gray-800">Measure: Baselining Performance (Weeks 1-2)</h3><p class="mt-1 text-gray-700">Established a quantitative baseline by collecting 12 months of invoices, license agreements, and telecom usage data. Conducted stakeholder interviews to gather qualitative data on workflow pain points.</p></div></div>
+                            <div class="flex items-start"><div class="flex-shrink-0 h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">A</div><div class="ml-6"><h3 class="text-xl font-semibold text-gray-800">Analyze: Root Cause Analysis (Weeks 3-4)</h3><p class="mt-1 text-gray-700">Utilized the "5 Whys" technique to drill down past surface-level symptoms. The analysis confirmed that a lack of <strong>IT governance</strong> and <strong>proactive vendor management</strong> were the core issues driving excess costs.</p><div class="mt-6 bg-gray-50 p-6 rounded-lg border border-gray-200"><div class="grid grid-cols-1 md:grid-cols-2 gap-8"><div><h4 class="font-bold text-lg text-center mb-4 text-gray-800">Problem Area 1: Redundant Software</h4><ul class="space-y-2 text-sm"><li class="p-3 bg-white rounded-lg shadow-sm"><strong>Problem:</strong> Annual software spend is <span class="font-bold text-red-600">$36,600</span> higher than necessary.</li><li class="p-3 bg-white rounded-lg shadow-sm ml-4"><strong class="text-gray-500">↳ 1. Why?</strong> Paying for active licenses for Skype and RingCentral.</li><li class="p-3 bg-white rounded-lg shadow-sm ml-8"><strong class="text-gray-500">↳ 2. Why?</strong> Staff used them alongside official Teams and Zoom platforms.</li><li class="p-3 bg-white rounded-lg shadow-sm ml-12"><strong class="text-gray-500">↳ 3. Why?</strong> No official standard or decommissioning plan existed for old software.</li><li class="p-3 bg-white rounded-lg shadow-sm ml-16"><strong class="text-gray-500">↳ 4. Why?</strong> Past IT rollouts focused only on implementation, not on user transition or retirement of old systems.</li><li class="p-3 bg-red-100 text-red-800 rounded-lg shadow-sm ml-20"><strong class="font-bold">↳ 5. Why? [ROOT CAUSE]</strong> Lack of a formal <strong>IT governance policy.</strong></li></ul></div><div><h4 class="font-bold text-lg text-center mb-4 text-gray-800">Problem Area 2: High Mobile Costs</h4><ul class="space-y-2 text-sm"><li class="p-3 bg-white rounded-lg shadow-sm"><strong>Problem:</strong> Wasting <span class="font-bold text-red-600">$20,000</span> annually in overages & admin time.</li><li class="p-3 bg-white rounded-lg shadow-sm ml-4"><strong class="text-gray-500">↳ 1. Why?</strong> Data plans were oversized and managed manually after issues arose.</li><li class="p-3 bg-white rounded-lg shadow-sm ml-8"><strong class="text-gray-500">↳ 2. Why?</strong> The plan was never reviewed against actual usage data.</li><li class="p-3 bg-white rounded-lg shadow-sm ml-12"><strong class="text-gray-500">↳ 3. Why?</strong> There was no single point of contact for vendor management.</li><li class="p-3 bg-white rounded-lg shadow-sm ml-16"><strong class="text-gray-500">↳ 4. Why?</strong> Telecom was viewed as a low-level administrative task, not a strategic cost center.</li><li class="p-3 bg-red-100 text-red-800 rounded-lg shadow-sm ml-20"><strong class="font-bold">↳ 5. Why? [ROOT CAUSE]</strong> Lack of a proactive <strong>vendor & asset management strategy.</strong></li></ul></div></div></div></div></div>
+                            <div class="flex items-start"><div class="flex-shrink-0 h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">I</div><div class="ml-6"><h3 class="text-xl font-semibold text-gray-800">Improve: Implementation & Optimization (Weeks 5-7)</h3><p class="mt-1 text-gray-700">Executed the consolidation plan: renegotiated carrier contracts, decommissioned redundant software (Skype, RingCentral), and standardized on the Microsoft Teams & Zoom ecosystem. A clear communication plan ensured a smooth transition for all employees.</p></div></div>
+                            <div class="flex items-start"><div class="flex-shrink-0 h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">C</div><div class="ml-6"><h3 class="text-xl font-semibold text-gray-800">Control: Sustaining the Gains (Week 8)</h3><p class="mt-1 text-gray-700">To prevent regression and ensure long-term value, two key documents were created: a formal <strong>IT Governance Standard Operating Procedure (SOP)</strong> and a <strong>Vendor & Asset Management Playbook</strong>. The SOP included a new policy mandating that any IT project affecting over 25% of staff must include a formal change management plan, ensuring smooth user transitions and successful adoption before legacy systems are retired.</p></div></div>
+                        </div>
+                    </section>
+                    <section id="results-cs3">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-chart-pie mr-3 text-indigo-600"></i>4.0 Results: Quantifiable Impact & Strategic Value</h2>
+                        <p class="mt-4 text-gray-700 leading-relaxed">This initiative transcended simple cost-cutting. By addressing foundational process failures, we delivered measurable financial returns, enhanced operational capabilities, and provided a sustainable framework for future growth and technological adoption.</p>
+                        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
+                            <div class="bg-green-100 p-6 rounded-lg border border-green-200 transform hover:scale-105 transition-transform duration-300"><h3 class="text-5xl font-extrabold text-green-700">$56,600</h3><p class="mt-2 font-semibold text-gray-800">Total Annualized Savings</p><p class="text-sm text-gray-600">(18% Reduction)</p></div>
+                            <div class="bg-indigo-100 p-6 rounded-lg border border-indigo-200 transform hover:scale-105 transition-transform duration-300"><h3 class="text-5xl font-extrabold text-indigo-700">180+</h3><p class="mt-2 font-semibold text-gray-800">Admin Hours Reclaimed Annually</p><p class="text-sm text-gray-600">(30% Efficiency Gain)</p></div>
+                            <div class="bg-purple-100 p-6 rounded-lg border border-purple-200 transform hover:scale-105 transition-transform duration-300"><h3 class="text-5xl font-extrabold text-purple-700">2</h3><p class="mt-2 font-semibold text-gray-800">New Governance Policies</p><p class="text-sm text-gray-600">(SOP & Playbook)</p></div>
+                        </div>
+                        <div class="mt-12 bg-gray-50 p-8 rounded-lg border border-gray-200">
+                            <h3 class="font-bold text-xl text-gray-800 mb-4">Project Outcome Analysis</h3>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                <div><h4 class="font-semibold text-lg text-gray-800 mb-2">Financial & Operational Impact</h4><ul class="list-disc list-inside space-y-3 text-gray-700"><li><strong>Software Cost Reduction: $36,600.</strong> Eliminated redundant platforms (Skype: $21.6k, RingCentral: $15k) by standardizing on a unified communications stack.</li><li><strong>Telecom Cost Reduction: $20,000.</strong> Right-sized mobile data plans based on a 12-month usage analysis, eliminating overage charges and waste.</li><li><strong>Vendor Management Optimization:</strong> Secured a dedicated account manager from the primary telecom carrier to handle all mobile device support, offloading this administrative burden and providing a single point of contact for escalations.</li></ul></div>
+                                <div><h4 class="font-semibold text-lg text-gray-800 mb-2">Lasting Strategic Value</h4><ul class="list-disc list-inside space-y-3 text-gray-700"><li><strong>Improved Collaboration:</strong> A single, unified communication platform (Microsoft Teams & Zoom) reduced friction and improved workflow efficiency across departments.</li><li><strong>Enhanced Security:</strong> Decommissioning unmanaged legacy software reduced the company's security attack surface.</li><li><strong>Scalable Framework:</strong> The new governance SOPs provide a clear, sustainable framework for all future technology evaluation, procurement, and lifecycle management, ensuring these savings persist.</li></ul></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div></div></div>
+    <div id="case-study-modal-4" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="modal-title-4"><div class="modal-container bg-white rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300"><div class="p-6 md:p-8 border-b flex-shrink-0"><div class="flex justify-between items-start"><div><span class="text-sm font-semibold text-pink-600">PROCESS AUTOMATION</span><h2 id="modal-title-4" class="text-2xl md:text-3xl font-bold text-gray-900 mt-1">Streamlined Visitor Check-in System</h2></div><button data-modal-close="case-study-modal-4" class="text-gray-500 hover:text-gray-800 flex-shrink-0 ml-4" aria-label="Close modal"><i data-lucide="x" class="w-8 h-8"></i></button></div></div><div class="overflow-y-auto modal-scroll-content flex-1 bg-slate-50">
+        <!-- Injected Case Study 4 Content -->
+        <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+            <div class="bg-white rounded-2xl shadow-2xl shadow-gray-300/30 overflow-hidden max-w-6xl mx-auto">
+                <header class="p-8 md:p-12 bg-gray-900 text-white relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-gray-900 to-slate-900 opacity-75"></div>
+                    <div class="relative z-10">
+                        <p class="text-sm font-semibold text-indigo-300 uppercase tracking-wider">Operations Consulting Case Study</p>
+                        <h1 class="text-4xl md:text-5xl font-extrabold mt-2 text-white">Operations Transformation: Visitor Management System</h1>
+                        <p class="mt-4 text-lg text-gray-300 max-w-3xl">Strategic Implementation of the Envoy Visitor Management System to Enhance Security, Compliance, and Efficiency.</p>
+                    </div>
+                </header>
+                <div class="p-8 md:p-12 space-y-16">
+                    <section id="summary-cs4">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-rocket mr-3 text-indigo-600"></i>1.0 Executive Summary</h2>
+                        <div class="mt-4 border-l-4 border-indigo-500 pl-6 text-gray-700 leading-relaxed space-y-4">
+                            <p>This case study documents the successful operational overhaul of the visitor management process across three corporate offices. The project addressed critical inefficiencies, security vulnerabilities, and compliance gaps inherent in the legacy manual, paper-based system. By implementing the Envoy Visitor Management System, we transitioned to a fully automated, secure, and professional digital solution.</p>
+                            <p>The initiative yielded substantial quantitative and qualitative returns, most notably reclaiming over <strong>45 administrative hours per week</strong>, achieving <strong>100% NDA compliance</strong> for designated visitors, and significantly enhancing corporate security protocols and guest experience. This document details the project lifecycle, from initial problem analysis using Lean Six Sigma principles to the final deliverables, including comprehensive Standard Operating Procedures (SOPs) and a quantifiable Return on Investment (ROI).</p>
+                        </div>
+                    </section>
+                    <section id="kpis-cs4">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-tachometer-alt mr-3 text-indigo-600"></i>2.0 Key Performance Indicators (KPIs) & Results</h2>
+                        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                            <div class="bg-green-100 p-6 rounded-lg border border-green-200"><div class="text-5xl font-extrabold text-green-700">45+</div><div class="mt-2 font-semibold text-gray-800">Hours Saved Weekly</div></div>
+                            <div class="bg-green-100 p-6 rounded-lg border border-green-200"><div class="text-5xl font-extrabold text-green-700">100%</div><div class="mt-2 font-semibold text-gray-800">NDA Compliance Achieved</div></div>
+                            <div class="bg-indigo-100 p-6 rounded-lg border border-indigo-200"><div class="text-5xl font-extrabold text-indigo-700">95%</div><div class="mt-2 font-semibold text-gray-800">Reduction in Manual Tasks</div></div>
+                            <div class="bg-indigo-100 p-6 rounded-lg border border-indigo-200"><div class="text-5xl font-extrabold text-indigo-700">>80%</div><div class="mt-2 font-semibold text-gray-800">Faster Host Notification</div></div>
+                        </div>
+                    </section>
+                    <section id="analysis-cs4">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-search mr-3 text-indigo-600"></i>3.0 Problem Analysis (DMAIC Framework)</h2>
+                        <p class="mt-4 text-gray-700 leading-relaxed">An analysis of the visitor check-in process revealed a system plagued by operational waste (Muda), inconsistency (Mura), and overburden (Muri). The manual process across three US offices was a significant source of administrative drain, consuming over 45 hours weekly. This inefficiency created a poor first impression, posed security risks due to unreliable visitor logs, and exposed the company to compliance liabilities from inconsistent NDA management.</p>
+                        <div class="mt-6 bg-gray-50 p-6 rounded-lg border border-gray-200">
+                            <h4 class="text-xl font-semibold text-center mb-1">Current State Workflow: High-Friction, Manual Process</h4>
+                            <p class="text-sm text-center text-gray-600 mb-6">Illustrates the inefficient, multi-step, and manual process of signing in a single visitor, highlighting bottlenecks and non-value-added time.</p>
+                            <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full">
+                                <div class="swimlane"><div class="swimlane-header bg-yellow-100 text-yellow-800">VISITOR</div><div class="space-y-3 p-2"><div class="task-box">1. Arrives</div><div class="task-box mt-12">5. Signs Logbook</div><div class="task-box mt-12">8. Signs Paper NDA</div></div></div>
+                                <div class="swimlane"><div class="swimlane-header bg-indigo-100 text-indigo-800">FRONT DESK STAFF</div><div class="space-y-3 p-2"><div class="task-box">2. Greets, asks purpose</div><div class="task-box">3. Finds paper logbook & pen</div><div class="task-box">4. Asks visitor to sign in</div><div class="task-box">6. Finds paper NDA form</div><div class="task-box">7. Asks visitor to read & sign</div><div class="task-box">9. Manually searches directory</div><div class="task-box bg-red-100 border-red-300">10. Calls or emails host</div><div class="task-box bg-red-100 border-red-300">12. Waits for host to respond</div><div class="task-box">14. Files paper NDA</div></div></div>
+                                <div class="swimlane"><div class="swimlane-header bg-purple-100 text-purple-800">EMPLOYEE HOST</div><div class="space-y-3 p-2 mt-64"><div class="task-box bg-red-100 border-red-300">11. (Maybe) Sees notification</div><div class="task-box bg-red-100 border-red-300">13. Finishes task, walks to desk</div><div class="task-box bg-green-100 border-green-300">15. Greets visitor</div></div></div>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="mt-12">
+                        <details class="border border-gray-200 rounded-lg bg-white overflow-hidden" open>
+                            <summary class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100"><h3 class="text-xl font-semibold text-gray-800 flex items-center"><i class="fas fa-file-signature mr-3 text-indigo-600"></i>Scope of Work (SOW)</h3><span class="chevron text-indigo-600 transform transition-transform duration-200 text-2xl font-light">&rsaquo;</span></summary>
+                            <div class="p-6 border-t border-gray-200 text-gray-700 space-y-8 document-content">
+                                <div><h3 class="text-2xl font-bold text-gray-900 border-b-2 pb-2">1. Project Charter & Objectives</h3><ul class="list-disc mt-4"><li><strong>Modernize Visitor Experience:</strong> Implement a professional, seamless, and efficient digital check-in process.</li><li><strong>Enhance Security & Control:</strong> Establish a real-time, accurate, and auditable digital log of all on-site visitors.</li><li><strong>Automate & Eliminate Waste:</strong> Eradicate manual tasks including paper logs, NDA filing, and host notification.</li><li><strong>Guarantee Compliance:</strong> Enforce 100% compliance by mandating digital NDA signatures.</li></ul></div>
+                                <div><h3 class="text-2xl font-bold text-gray-900 border-b-2 pb-2">2. Scope of Work & Execution Plan</h3><p class="mt-4">This project encompasses the end-to-end procurement, installation, configuration, and deployment of the Envoy system across three (3) designated office locations.</p><h4 class="text-lg font-semibold mt-4">Phase 1: Hardware Procurement & Staging</h4><ol class="list-decimal"><li>Procure three (3) iPads and three (3) secure Heckler Design stands.</li><li>Procure three (3) Brother QL-820NWB badge printers.</li><li>Assemble and secure hardware at each front desk location.</li><li>Connect and configure printers on local networks, coordinating with IT for static IP assignments.</li></ol><h4 class="text-lg font-semibold mt-4">Phase 2: System Configuration & Customization</h4><ol class="list-decimal"><li>Establish master Envoy account and configure location-specific settings.</li><li>Integrate company branding (logos, color schemes) into the visitor UI.</li><li>Digitize and deploy the corporate NDA, configuring signing logic and validity periods.</li><li>Populate employee directory via CSV import to enable host selection and notifications.</li><li>Configure and test automated host notifications via Email and Slack.</li><li>Design and customize visitor badge templates.</li><li>Lock down iPads into Kiosk Mode using Apple's Guided Access feature.</li></ol><h4 class="text-lg font-semibold mt-4">Phase 3: Documentation, Training & Go-Live</h4><ol class="list-decimal"><li>Develop comprehensive Standard Operating Procedures (SOPs) for both Front Desk (User) and IT (Technical) teams.</li><li>Conduct structured training sessions for all end-users and technical staff.</li><li>Execute a phased go-live, with on-site support for the initial deployment week.</li><li>Conduct a post-implementation review to validate success against KPIs.</li></ol></div>
+                                <div><h3 class="text-2xl font-bold text-gray-900 border-b-2 pb-2">3. Project Deliverables</h3><ul class="list-disc mt-4"><li>Three (3) fully functional Envoy visitor check-in kiosks.</li><li>Three (3) fully functional and networked badge printers.</li><li>A fully configured Envoy software environment.</li><li><strong>SOP-FD-001:</strong> Envoy Daily Operations (for Front Desk).</li><li><strong>SOP-IT-004:</strong> Envoy System Administration (for IT).</li><li>Completed training logs and user acceptance documentation.</li><li>Project close-out report detailing ROI and KPI achievement.</li></ul></div>
+                                <div><h3 class="text-2xl font-bold text-gray-900 border-b-2 pb-2">4. Solution: Future State Value Stream Map</h3><div class="mt-6 bg-gray-50 p-6 rounded-lg border border-gray-200"><h4 class="text-xl font-semibold text-center mb-1">Future State Workflow: Automated & Efficient Process</h4><p class="text-sm text-center text-gray-600 mb-6">The new, streamlined process eliminates manual steps and bottlenecks, creating a frictionless and professional experience through automation.</p><div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full"><div class="swimlane"><div class="swimlane-header bg-yellow-100 text-yellow-800">VISITOR</div><div class="space-y-3 p-2"><div class="task-box bg-blue-100 border-blue-300">1. Arrives & uses iPad</div><div class="task-box bg-blue-100 border-blue-300">2. Enters details, selects host, signs NDA digitally</div><div class="task-box bg-blue-100 border-blue-300">3. Receives printed badge</div></div></div><div class="swimlane"><div class="swimlane-header bg-gray-700 text-white">ENVOY SYSTEM (AUTOMATION)</div><div class="space-y-3 p-2 mt-16"><div class="task-box bg-green-100 border-green-300">4. Instantly notifies host (Slack/Email)</div><div class="task-box bg-green-100 border-green-300">5. Securely logs visitor data & NDA</div></div></div><div class="swimlane"><div class="swimlane-header bg-purple-100 text-purple-800">EMPLOYEE HOST</div><div class="space-y-3 p-2 mt-24"><div class="task-box bg-green-100 border-green-300">6. Receives instant notification with guest photo</div><div class="task-box bg-green-100 border-green-300">7. Walks to front desk to greet visitor</div></div></div></div></div></div>
+                                <div><h3 class="text-2xl font-bold text-gray-900 border-b-2 pb-2">5. Project Accomplishments & ROI</h3><p class="mt-4">The successful implementation of the Envoy system transformed front desk operations from a cost center into a value-enabling function. The project exceeded all initial objectives.</p><ul class="list-disc mt-4"><li><strong>Operational Efficiency (ROI):</strong> Saved over <strong>45 hours of administrative work per week</strong>, translating to approximately 2,340 hours annually. At a blended administrative rate, this represents a significant direct cost saving and a project payback period of less than 6 months.</li><li><strong>Compliance & Risk Mitigation:</strong> Achieved <strong>100% NDA compliance</strong>, creating a complete, auditable trail of all signed legal documents and eliminating a major source of corporate liability.</li><li><strong>Enhanced Security Posture:</strong> Established a real-time, digital manifest of all on-site personnel, providing critical, instant-access data for emergency response and improving overall facility security.</li><li><strong>Modernized Corporate Image:</strong> Elevated the company's brand by providing a professional, modern, and seamless first impression for all guests, candidates, and partners, reinforcing its image as a technology-forward organization.</li></ul></div>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div></div></div>
+    <div id="case-study-modal-5" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="modal-title-5"><div class="modal-container bg-white rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300"><div class="p-6 md:p-8 border-b flex-shrink-0"><div class="flex justify-between items-start"><div><span class="text-sm font-semibold text-cyan-600">FIELD OPERATIONS</span><h2 id="modal-title-5" class="text-2xl md:text-3xl font-bold text-gray-900 mt-1">Remote Team Tech Overhaul</h2></div><button data-modal-close="case-study-modal-5" class="text-gray-500 hover:text-gray-800 flex-shrink-0 ml-4" aria-label="Close modal"><i data-lucide="x" class="w-8 h-8"></i></button></div></div><div class="overflow-y-auto modal-scroll-content flex-1 bg-slate-50">
+        <!-- Injected Case Study 5 Content -->
+        <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+            <div class="bg-white rounded-2xl shadow-2xl shadow-gray-300/30 overflow-hidden max-w-6xl mx-auto">
+                <header class="p-8 md:p-12 bg-gray-900 text-white relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-gray-900 to-slate-900 opacity-75"></div>
+                    <div class="relative z-10">
+                        <p class="text-sm font-semibold text-indigo-300 uppercase tracking-wider">Operations Consulting Case Study</p>
+                        <h1 class="text-4xl md:text-5xl font-extrabold mt-2 text-white">Comprehensive Operations Overhaul for Field & R&D Teams</h1>
+                        <p class="mt-4 text-lg text-gray-300 max-w-3xl">Applying Lean Six Sigma & Technology to Maximize Uptime and Safety</p>
+                    </div>
+                </header>
+                <div class="p-8 md:p-12 space-y-16">
+                    <section id="summary-cs5">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-rocket mr-3 text-indigo-600"></i>1.0 Executive Summary</h2>
+                        <div class="mt-4 border-l-4 border-indigo-500 pl-6 text-gray-700 leading-relaxed">
+                            <p>By implementing a multi-pronged strategy combining robust technology (UniFi, Cradlepoint), an automated CMMS (eMaint), and Lean Six Sigma principles, we transformed the operational capabilities of the R&D and Field teams. This initiative directly addressed critical points of failure, resulting in a <strong>95% reduction in downtime</strong> from parts shortages and a <strong>75% decrease in remote site troubleshooting time</strong>.</p>
+                        </div>
+                    </section>
+                    <section id="kpis-cs5">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-tachometer-alt mr-3 text-indigo-600"></i>2.0 Key Performance Indicator (KPI) Improvement</h2>
+                        <div class="mt-6 overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead><tr><th class="p-3 font-semibold bg-gray-100 text-gray-800 rounded-l-lg">Metric</th><th class="p-3 font-semibold bg-gray-100 text-gray-800 text-center">Before Project</th><th class="p-3 font-semibold bg-gray-100 text-gray-800 text-center">After Project</th><th class="p-3 font-semibold bg-gray-100 text-gray-800 text-center rounded-r-lg">Improvement</th></tr></thead>
+                                <tbody class="divide-y divide-gray-200 text-gray-700">
+                                    <tr><td class="p-3 font-medium">Downtime from R&D Parts Stockouts</td><td class="p-3 text-center text-red-600">~20 hours/month</td><td class="p-3 text-center text-green-600">&lt; 1 hour/month</td><td class="p-3 text-center font-bold text-green-700">95% Reduction</td></tr>
+                                    <tr><td class="p-3 font-medium">Mean Time To Resolve (MTTR) - Field Network Issues</td><td class="p-3 text-center text-red-600">4-6 hours (incl. travel)</td><td class="p-3 text-center text-green-600">&lt; 1 hour (remote diagnosis)</td><td class="p-3 text-center font-bold text-green-700">75% Reduction</td></tr>
+                                    <tr><td class="p-3 font-medium">Field Data Upload Success Rate (First Attempt)</td><td class="p-3 text-center text-red-600">~55% (unstable hotspots)</td><td class="p-3 text-center text-green-600">>80% (stable connection)</td><td class="p-3 text-center font-bold text-green-700">Vastly Increased Reliability</td></tr>
+                                    <tr><td class="p-3 font-medium">Reported Safety Incidents / Near-Misses</td><td class="p-3 text-center text-red-600">3 per year</td><td class="p-3 text-center text-green-600">1 per year</td><td class="p-3 text-center font-bold text-green-700">100% Reduction</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    <section id="methodology-cs5">
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-sitemap mr-3 text-indigo-600"></i>3.0 Project Methodology: Lean Six Sigma (DMAIC)</h2>
+                        <div class="mt-4 text-gray-700 leading-relaxed space-y-6">
+                            <p><strong>Phase 1: Define</strong><br>The organization faced systemic downtime and safety risks across its R&D and Field Operations teams. The core problems were defined as: a crippling lack of remote site visibility, unstable mobile connectivity, and constant R&D stockouts of critical consumables.</p>
+                            <p><strong>Phase 2 & 3: Measure & Analyze</strong><br>Initial data confirmed the severity of the KPIs. To understand the root causes, a Fishbone (Ishikawa) Diagram was used to structure a brainstorming session with key stakeholders.</p>
+                            <div class="mt-6 bg-gray-50 p-6 rounded-lg border border-gray-200 overflow-x-auto"><div class="fishbone"><div class="fishbone-body"><div class="fishbone-ribs-top"><div class="fishbone-category"><h4>Technology</h4><ul><li>Lack of remote visibility</li><li>No remote power cycling</li><li>Unreliable personal hotspots</li><li>No centralized asset tracking</li></ul></div><div class="fishbone-category"><h4>Methods (Process)</h4><ul><li>Manual inventory counts</li><li>Reliance on travel for diagnostics</li><li>No process for remote support</li><li>Inconsistent data access</li></ul></div><div class="fishbone-category"><h4>Materials</h4><ul><li>Fragile, non-industrial cabling</li><li>Frequent stockouts of critical parts</li><li>No visibility into stock levels</li><li>Disorganized parts storage</li></ul></div></div><div class="fishbone-spine"><div class="fishbone-head">Operational Downtime & Inefficiency</div></div><div class="fishbone-ribs-bottom"><div class="fishbone-category"><h4>Environment</h4><ul><li>Harsh industrial conditions</li><li>Surface wires pose trip hazards</li><li>Mobile trailer in varied locations</li><li>Poor cell service in field</li></ul></div><div class="fishbone-category"><h4>People</h4><ul><li>Lack of remote supervision</li><li>Time wasted searching for parts</li><li>Frustration from tech failures</li><li>Inconsistent safety adherence</li></ul></div><div class="fishbone-category"><h4>Measurement</h4><ul><li>No data on consumable usage</li><li>Downtime not accurately tracked</li><li>No metrics on network reliability</li><li>Inability to forecast part needs</li></ul></div></div></div></div></div>
+                            <p><strong>Phase 4: Improve</strong><br>Based on the analysis, a multi-faceted project was executed: deployed a UniFi network and camera system for remote monitoring, implemented a Cradlepoint industrial router for reliable connectivity, and rolled out eMaint CMMS for automated inventory management.</p>
+                            <p><strong>Phase 5: Control</strong><br>To sustain the gains, comprehensive Standard Operating Procedures (SOPs) were developed for all new systems, and the eMaint dashboard was established as the control tool for monitoring inventory levels and usage trends.</p>
+                        </div>
+                    </section>
+                    <div class="mt-12">
+                        <details class="border border-gray-200 rounded-lg bg-white overflow-hidden">
+                            <summary class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100"><h3 class="text-xl font-semibold text-gray-800 flex items-center"><i class="fas fa-file-signature mr-3 text-indigo-600"></i>Scopes of Work (SOWs)</h3><span class="chevron text-indigo-600 transform transition-transform duration-200 text-2xl font-light">&rsaquo;</span></summary>
+                            <div class="p-6 border-t border-gray-200 space-y-8 text-gray-700">
+                                <div><h4 class="text-xl font-semibold text-gray-800 border-b pb-2">SOW-001: R&D Center Remote Monitoring & Safety System</h4><p class="text-sm text-gray-600 mt-1"><strong>Client:</strong> Internal R&D / Field Operations</p><h5 class="font-bold mt-4">1. Project Overview & Business Need</h5><p>This project will engineer and deploy a robust remote monitoring solution to increase personnel safety, reduce diagnostic-related downtime, and improve management oversight at the R&D test facility. The current lack of visibility creates unacceptable safety risks and operational inefficiencies.</p><h5 class="font-bold mt-4">2. Scope of Work</h5><ul class="list-disc list-inside ml-4 space-y-1"><li><strong>In Scope:</strong> Installation of UniFi network controller, PoE switch, Wi-Fi access points, (5) UniFi G5 cameras; replacement of existing cabling with industrial-grade, shielded CAT6 and protective floor channeling; configuration of remote access portal; development of user and technician SOPs.</li><li><strong>Out of Scope:</strong> Physical server infrastructure changes; ongoing data subscription costs; integration with third-party software beyond standard UniFi capabilities.</li></ul><h5 class="font-bold mt-4">3. Key Deliverables</h5><ol class="list-decimal list-inside ml-4"><li>Fully functional and tested UniFi Network and Protect system.</li><li>Live, secure camera feeds accessible via web portal.</li><li>Completed installation of all cabling and hardware.</li><li>Finalized SOP documents for viewing and troubleshooting.</li></ol></div><hr class="my-8">
+                                <div><h4 class="text-xl font-semibold text-gray-800 border-b pb-2">SOW-002: Mobile Operations Connectivity Solution (Cradlepoint)</h4><p class="text-sm text-gray-600 mt-1"><strong>Client:</strong> Field Operations Team</p><h5 class="font-bold mt-4">1. Project Overview & Business Need</h5><p>The Field Operations team currently relies on unstable, consumer-grade personal hotspots, resulting in poor connectivity, failed data uploads, and significant lost time. This project will deploy an industrial-grade, dual-SIM cellular router to provide reliable, high-speed internet connectivity in the mobile trailer, enabling real-time data transfer and access to cloud services.</p><h5 class="font-bold mt-4">2. Scope of Work</h5><ul class="list-disc list-inside ml-4 space-y-1"><li><strong>In Scope:</strong> Procurement and installation of a Cradlepoint IBR1700 router; installation of a high-gain, roof-mounted cellular antenna; activation and configuration of dual SIM cards (AT&T, Verizon) for failover; configuration of local Wi-Fi network; development of field troubleshooting SOP.</li><li><strong>Out of Scope:</strong> Negotiation of cellular data plans; support for personal devices connecting to the network; advanced network configuration (VPN, custom firewall rules).</li></ul><h5 class="font-bold mt-4">3. Key Deliverables</h5><ol class="list-decimal list-inside ml-4"><li>Fully installed and configured Cradlepoint IBR1700 router.</li><li>Operational dual-SIM failover for maximum uptime.</li><li>A stable, secure Wi-Fi network within and around the mobile trailer.</li><li>Finalized SOP document for field team troubleshooting.</li></ol></div><hr class="my-8">
+                                <div><h4 class="text-xl font-semibold text-gray-800 border-b pb-2">SOW-003: Automated Inventory Management System (eMaint)</h4><p class="text-sm text-gray-600 mt-1"><strong>Client:</strong> R&D Operations Team</p><h5 class="font-bold mt-4">1. Project Overview & Business Need</h5><p>The R&D lab experiences frequent and costly project delays due to stockouts of critical consumables. The lack of an inventory system prevents usage tracking, forecasting, and timely reordering. This project will implement the eMaint CMMS to automate inventory management, eliminating stockouts and providing valuable usage data.</p><h5 class="font-bold mt-4">2. Scope of Work</h5><ul class="list-disc list-inside ml-4 space-y-1"><li><strong>In Scope:</strong> Configuration of the eMaint inventory module; data import of initial parts list; creation of a standardized bin labeling system; procurement and setup of a barcode scanner; development and delivery of user training; creation of SOPs for all key inventory processes.</li><li><strong>Out of Scope:</strong> Integration with accounting software; management of vendor relationships or purchasing; physical reorganization of the stock room beyond bin labeling.</li></ul><h5 class="font-bold mt-4">3. Key Deliverables</h5><ol class="list-decimal list-inside ml-4"><li>A fully configured eMaint inventory database with all critical parts loaded.</li><li>A physically labeled and organized stock room corresponding to the eMaint system.</li><li>A functional barcode scanning system for check-in/check-out.</li><li>Training session completed with all relevant R&D personnel.</li><li>Finalized SOP documents for all inventory management functions.</li></ol></div>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div></div></div>
+
+    <!-- Contact Form Modal -->
+    <div id="contact-form-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+        <div class="modal-container bg-white rounded-lg shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300 relative">
+            <button data-modal-close="contact-form-modal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 z-10" aria-label="Close contact form"><i data-lucide="x" class="w-7 h-7"></i></button>
+            <div class="overflow-y-auto modal-scroll-content flex-1">
+                <iframe data-tally-src="https://tally.so/embed/mRqorl?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&formEventsForwarding=1" loading="lazy" width="100%" height="350" frameborder="0" marginheight="0" marginwidth="0" title="Portfolio Contact"></iframe>
+                <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meeting Schedule Modal -->
+    <div id="meeting-schedule-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="meeting-modal-title">
+        <div class="modal-container bg-white rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300">
+            <div class="p-6 md:p-8 border-b flex-shrink-0">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 id="meeting-modal-title" class="text-2xl md:text-3xl font-bold text-gray-900 mt-1">Schedule an Appointment</h2>
+                        <p class="text-gray-600 mt-2">Book a time directly on my calendar.</p>
+                    </div>
+                    <button data-modal-close="meeting-schedule-modal" class="text-gray-500 hover:text-gray-800 flex-shrink-0 ml-4" aria-label="Close meeting scheduler"><i data-lucide="x" class="w-8 h-8"></i></button>
+                </div>
+            </div>
+            <div class="overflow-y-auto modal-scroll-content">
+                <iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0M9cO-UKX_JdoOrrrPnNysncxVaGHndx4iS_8HtS2M7gejzgaOvPmRJhkyD7qKeQ6NvPyqDJVD?gv=true" style="border: 0" width="100%" frameborder="0" class="h-[75vh]"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- SCRIPT INITIALIZATION ---
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+
+        // --- MOBILE MENU ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // --- MODAL (POP-UP) LOGIC ---
+        document.body.addEventListener('click', (e) => {
+            const openButton = e.target.closest('[data-modal-target]');
+            if (openButton) {
+                const modal = document.getElementById(openButton.dataset.modalTarget);
+                openModal(modal);
+            }
+            const closeButton = e.target.closest('[data-modal-close]');
+            if (closeButton) {
+                const modalId = closeButton.dataset.modalClose;
+                const modal = document.getElementById(modalId);
+                closeModal(modal);
+            }
+            if (e.target.classList.contains('modal-overlay')) {
+                closeModal(e.target);
+            }
+        });
+
+        function openModal(modal) {
+            if (modal == null) return;
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.querySelector('.modal-container').classList.remove('scale-95');
+            document.body.style.overflow = 'hidden';
+            modal.focus();
+        }
+
+        function closeModal(modal) {
+            if (modal == null) return;
+            modal.classList.add('opacity-0');
+            modal.querySelector('.modal-container').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('pointer-events-none');
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+    </script>
+</body>
+</html>

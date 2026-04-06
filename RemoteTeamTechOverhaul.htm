@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study: Remote Team Tech Overhaul</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        .custom-card {
+            background-color: #f0f9ff; /* A very light blue */
+            border: 1px solid #e0f2fe;
+        }
+        /* Style to prevent background scroll when modal is open */
+        .modal-open {
+            overflow: hidden;
+        }
+        
+        /* Add styles for category lines, etc. */
+        /* Styles for Case Study Modals */
+        .modal-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-container {
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal-scroll-content {
+            -webkit-overflow-scrolling: touch;
+        }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] .chevron {
+            transform: rotate(90deg);
+        }
+        .scorecard-table, .sow-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .scorecard-table th, .scorecard-table td,
+        .sow-table th, .sow-table td {
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .scorecard-table thead th, .sow-table thead th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+        }
+        .swimlane {
+            flex: 1;
+            background-color: #f9fafb;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            min-width: 200px;
+        }
+        .swimlane-header {
+            padding: 0.75rem;
+            font-weight: bold;
+            border-bottom: 1px solid #e5e7eb;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .task-box {
+            background-color: white;
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+        .fishbone {
+    position: relative;
+    padding: 2rem 0;
+}
+.fishbone-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.fishbone-spine {
+    flex-grow: 1;
+    height: 4px;
+    background-color: #374151;
+}
+.fishbone-head {
+    background-color: #2563EB; /* Blue box */
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.375rem;
+    font-weight: bold;
+    text-align: center;
+    flex-shrink: 0; /* Prevents the head from shrinking */
+}
+.fishbone-ribs-top, .fishbone-ribs-bottom {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+/* THIS IS THE NEW CODE FOR SPACING */
+.fishbone-ribs-top {
+    margin-bottom: 1.5rem; /* Pushes the top ribs up, away from the center */
+}
+.fishbone-ribs-bottom {
+    margin-top: 1.5rem; /* Pushes the bottom ribs down, away from the center */
+}
+.fishbone-category {
+    position: relative;
+    padding: 1rem;
+    width: 30%;
+}
+.fishbone-ribs-top .fishbone-category {
+    padding-bottom: 2.5rem; /* Controls space for the bone */
+}
+.fishbone-ribs-bottom .fishbone-category {
+    padding-top: 2.5rem; /* Controls space for the bone */
+}
+.fishbone-ribs-top .fishbone-category::after,
+.fishbone-ribs-bottom .fishbone-category::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    background: #6b7280;
+    left: 50%;
+    transform: translateX(-50%); /* Center the line */
+}
+.fishbone-ribs-top .fishbone-category::after {
+    height: 2.5rem; /* This is the bone length */
+    bottom: 0; /* Position at the bottom edge of the category box */
+}
+.fishbone-ribs-bottom .fishbone-category::after {
+    height: 2.5rem; /* This is the bone length */
+    top: 0; /* Position at the top edge of the category box */
+}
+.fishbone-category h4 { 
+    font-weight: bold; 
+    margin-bottom: 0.5rem; 
+}
+.fishbone-category ul { 
+    list-style-type: disc; 
+    padding-left: 1rem; 
+    font-size: 0.875rem; 
+}
+        .workflow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .workflow-step, .workflow-end {
+            background-color: #fff;
+            border: 1px solid #d1d5db;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+        .workflow-end { background-color: #dbeafe; border-color: #93c5fd; }
+        .workflow-arrow::after {
+            content: '→';
+            font-size: 1.5rem;
+            color: #9ca3af;
+        }
+        .blinking-light {
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Main Page Container -->
+    <div class="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+        <div class="bg-white rounded-lg shadow-xl w-full flex flex-col">
+            <!-- Header Section -->
+            <div class="p-6 md:p-8 border-b">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-sm font-semibold text-cyan-600">FIELD OPERATIONS</span>
+                        <h2 id="modal-title-5" class="text-2xl md:text-3xl font-bold text-gray-900 mt-1">Remote Team Tech Overhaul</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="overflow-y-auto bg-slate-50">
+                <div class="p-8 md:p-12 space-y-16">
+                    
+                    <!-- Executive Summary -->
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-rocket mr-3 text-indigo-600"></i>1.0 Executive Summary</h2>
+                        <div class="mt-4 border-l-4 border-indigo-500 pl-6 text-gray-700 leading-relaxed">
+                            <p>
+            The Field Operations and R&D teams faced systemic operational inefficiencies that created significant downtime, project delays, and safety risks. Core problems included a crippling lack of remote site visibility and unstable mobile connectivity for the field team, leading to an average of 4-6 hours of Mean Time To Resolve (MTTR) for network issues. Concurrently, the R&D lab suffered from constant stockouts of critical parts, causing approximately 20 hours of project downtime per month.
+        </p><br>
+        <p>
+            To address these challenges, a multi-pronged strategy was implemented using the Lean Six Sigma (DMAIC) methodology. The solution involved deploying a UniFi network and camera system for remote monitoring and safety, installing a Cradlepoint industrial cellular router to ensure reliable field connectivity, and rolling out the eMaint CMMS for automated inventory management.
+        </p><br>
+        <p>
+            This comprehensive overhaul successfully transformed the operational capabilities of both teams. The initiative resulted in a <strong>95% reduction in downtime</strong> from parts shortages, a <strong>75% decrease in remote site troubleshooting time</strong>, and a <strong>100% reduction in reported safety incidents</strong>.
+        </p>
+                        </div>
+                    </section>
+                    
+                    <!-- The Challenge -->
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-tachometer-alt mr-3 text-indigo-600"></i>2.0 KPI Improvement</h2>
+                        <div class="mt-6 overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr>
+                                        <th class="p-3 font-semibold bg-gray-100 text-gray-800 rounded-l-lg">Metric</th>
+                                        <th class="p-3 font-semibold bg-gray-100 text-gray-800 text-center">Before Project</th>
+                                        <th class="p-3 font-semibold bg-gray-100 text-gray-800 text-center">After Project</th>
+                                        <th class="p-3 font-semibold bg-gray-100 text-gray-800 text-center rounded-r-lg">Improvement</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200 text-gray-700">
+                                    <tr><td class="p-3 font-medium">Downtime from R&D Parts Stockouts</td><td class="p-3 text-center text-red-600">~20 hours/month</td><td class="p-3 text-center text-green-600">&lt; 1 hour/month</td><td class="p-3 text-center font-bold text-green-700">95% Reduction</td></tr>
+                                    <tr><td class="p-3 font-medium">Mean Time To Resolve (MTTR) - Field Network Issues</td><td class="p-3 text-center text-red-600">4-6 hours (incl. travel)</td><td class="p-3 text-center text-green-600">&lt; 1 hour (remote diagnosis)</td><td class="p-3 text-center font-bold text-green-700">75% Reduction</td></tr>
+                                    <tr><td class="p-3 font-medium">Field Data Upload Success Rate (First Attempt)</td><td class="p-3 text-center text-red-600">~55% (unstable hotspots)</td><td class="p-3 text-center text-green-600">&gt;80% (stable connection)</td><td class="p-3 text-center font-bold text-green-700">Vastly Increased Reliability</td></tr>
+                                    <tr><td class="p-3 font-medium">Reported Safety Incidents / Near-Misses</td><td class="p-3 text-center text-red-600">3 per year</td><td class="p-3 text-center text-green-600">1 per year</td><td class="p-3 text-center font-bold text-green-700">100% Reduction</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    
+                    <!-- The Solution -->
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-sitemap mr-3 text-indigo-600"></i>3.0 Project Methodology: Lean Six Sigma (DMAIC)</h2>
+                         <div class="mt-4 text-gray-700 leading-relaxed space-y-6">
+                            <p><strong>Phase 1: Define</strong><br>The organization faced systemic downtime and safety risks across its R&D and Field Operations teams. The core problems were defined as: a crippling lack of remote site visibility, unstable mobile connectivity, and constant R&D stockouts of critical consumables.</p>
+                            <p><strong>Phase 2 & 3: Measure & Analyze</strong><br>Initial data confirmed the severity of the KPIs. To understand the root causes, a Fishbone (Ishikawa) Diagram was used to structure a brainstorming session with key stakeholders.</p>
+                            <div class="mt-6 bg-gray-50 p-6 rounded-lg border border-gray-200 overflow-x-auto">
+            <div class="fishbone">
+                <div class="fishbone-body">
+                    <div class="fishbone-ribs-top">
+                        <div class="fishbone-category"><h4>Technology</h4><ul><li>Lack of remote visibility</li><li>No remote power cycling</li><li>Unreliable personal hotspots</li><li>No centralized asset tracking</li></ul></div>
+                        <div class="fishbone-category"><h4>Methods (Process)</h4><ul><li>Manual inventory counts</li><li>Reliance on travel for diagnostics</li><li>No process for remote support</li><li>Inconsistent data access</li></ul></div>
+                        <div class="fishbone-category"><h4>Materials</h4><ul><li>Fragile, non-industrial cabling</li><li>Frequent stockouts of critical parts</li><li>No visibility into stock levels</li><li>Disorganized parts storage</li></ul></div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; width: 100%;">
+                        <div class="fishbone-spine"></div>
+                        <div class="fishbone-head">Operational Downtime & Inefficiency</div>
+                    </div>
+                    
+                    <div class="fishbone-ribs-bottom">
+                        <div class="fishbone-category"><h4>Environment</h4><ul><li>Harsh industrial conditions</li><li>Surface wires pose trip hazards</li><li>Mobile trailer in varied locations</li><li>Poor cell service in field</li></ul></div>
+                        <div class="fishbone-category"><h4>People</h4><ul><li>Lack of remote supervision</li><li>Time wasted searching for parts</li><li>Frustration from tech failures</li><li>Inconsistent safety adherence</li></ul></div>
+                        <div class="fishbone-category"><h4>Measurement</h4><ul><li>No data on consumable usage</li><li>Downtime not accurately tracked</li><li>No metrics on network reliability</li><li>Inability to forecast part needs</li></ul></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                            </div>
+                            <p><strong>Phase 4: Improve</strong><br>Based on the analysis, a multi-faceted project was executed: deployed a UniFi network and camera system for remote monitoring, implemented a Cradlepoint industrial router for reliable connectivity, and rolled out eMaint CMMS for automated inventory management.</p>
+                            <p><strong>Phase 5: Control</strong><br>To sustain the gains, comprehensive Standard Operating Procedures (SOPs) were developed for all new systems, and the eMaint dashboard was established as the control tool for monitoring inventory levels and usage trends.</p>
+                        </div>
+                    </section>
+                    
+                    <!-- Standardized Collapsible SOW Section -->
+                <div class="mt-12">
+                    <details class="border border-gray-200 rounded-lg bg-white overflow-hidden" open>
+                        <summary class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                                <i class="fas fa-file-signature mr-3 text-indigo-600"></i>
+                                Statement of Work (SOWs)
+                            </h3>
+                            <span class="chevron text-indigo-600 transform transition-transform duration-200 text-2xl font-light">&rsaquo;</span>
+                        </summary>
+                        <div class="p-6 border-t border-gray-200 space-y-8 text-gray-700">
+                            <!-- SOW #1 -->
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-800 border-b pb-2">SOW-001: R&D Center Remote Monitoring & Safety System</h4>
+                                <p class="text-sm text-gray-600 mt-1"><strong>Client:</strong> Internal R&D / Field Operations</p>
+                                <h5 class="font-bold mt-4">1. Project Overview & Business Need</h5>
+                                <p>This project will engineer and deploy a robust remote monitoring solution to increase personnel safety, reduce diagnostic-related downtime, and improve management oversight at the R&D test facility. The current lack of visibility creates unacceptable safety risks and operational inefficiencies.</p>
+                                <h5 class="font-bold mt-4">2. Scope of Work</h5>
+                                <ul class="list-disc list-inside ml-4 space-y-1">
+                                    <li><strong>In Scope:</strong> Installation of UniFi network controller, PoE switch, Wi-Fi access points, (5) UniFi G5 cameras; replacement of existing cabling with industrial-grade, shielded CAT6 and protective floor channeling; configuration of remote access portal; development of user and technician SOPs.</li>
+                                    <li><strong>Out of Scope:</strong> Physical server infrastructure changes; ongoing data subscription costs; integration with third-party software beyond standard UniFi capabilities.</li>
+                                </ul>
+                                <h5 class="font-bold mt-4">3. Key Deliverables</h5>
+                                <ol class="list-decimal list-inside ml-4">
+                                    <li>Fully functional and tested UniFi Network and Protect system.</li>
+                                    <li>Live, secure camera feeds accessible via web portal.</li>
+                                    <li>Completed installation of all cabling and hardware.</li>
+                                    <li>Finalized SOP documents for viewing and troubleshooting.</li>
+                                </ol>
+                            </div>
+                            <hr class="my-8">
+                            <!-- SOW #2 -->
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-800 border-b pb-2">SOW-002: Mobile Operations Connectivity Solution (Cradlepoint)</h4>
+                                <p class="text-sm text-gray-600 mt-1"><strong>Client:</strong> Field Operations Team</p>
+                                <h5 class="font-bold mt-4">1. Project Overview & Business Need</h5>
+                                <p>The Field Operations team currently relies on unstable, consumer-grade personal hotspots, resulting in poor connectivity, failed data uploads, and significant lost time. This project will deploy an industrial-grade, dual-SIM cellular router to provide reliable, high-speed internet connectivity in the mobile trailer, enabling real-time data transfer and access to cloud services.</p>
+                                <h5 class="font-bold mt-4">2. Scope of Work</h5>
+                                <ul class="list-disc list-inside ml-4 space-y-1">
+                                    <li><strong>In Scope:</strong> Procurement and installation of a Cradlepoint IBR1700 router; installation of a high-gain, roof-mounted cellular antenna; activation and configuration of dual SIM cards (AT&T, Verizon) for failover; configuration of local Wi-Fi network; development of field troubleshooting SOP.</li>
+                                    <li><strong>Out of Scope:</strong> Negotiation of cellular data plans; support for personal devices connecting to the network; advanced network configuration (VPN, custom firewall rules).</li>
+                                </ul>
+                                <h5 class="font-bold mt-4">3. Key Deliverables</h5>
+                                <ol class="list-decimal list-inside ml-4">
+                                    <li>Fully installed and configured Cradlepoint IBR1700 router.</li>
+                                    <li>Operational dual-SIM failover for maximum uptime.</li>
+                                    <li>A stable, secure Wi-Fi network within and around the mobile trailer.</li>
+                                    <li>Finalized SOP document for field team troubleshooting.</li>
+                                </ol>
+                            </div>
+                            <hr class="my-8">
+                            <!-- SOW #3 -->
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-800 border-b pb-2">SOW-003: Automated Inventory Management System (eMaint)</h4>
+                                <p class="text-sm text-gray-600 mt-1"><strong>Client:</strong> R&D Operations Team</p>
+                                <h5 class="font-bold mt-4">1. Project Overview & Business Need</h5>
+                                <p>The R&D lab experiences frequent and costly project delays due to stockouts of critical consumables. The lack of an inventory system prevents usage tracking, forecasting, and timely reordering. This project will implement the eMaint CMMS to automate inventory management, eliminating stockouts and providing valuable usage data.</p>
+                                <h5 class="font-bold mt-4">2. Scope of Work</h5>
+                                <ul class="list-disc list-inside ml-4 space-y-1">
+                                    <li><strong>In Scope:</strong> Configuration of the eMaint inventory module; data import of initial parts list; creation of a standardized bin labeling system; procurement and setup of a barcode scanner; development and delivery of user training; creation of SOPs for all key inventory processes.</li>
+                                    <li><strong>Out of Scope:</strong> Integration with accounting software; management of vendor relationships or purchasing; physical reorganization of the stock room beyond bin labeling.</li>
+                                </ul>
+                                <h5 class="font-bold mt-4">3. Key Deliverables</h5>
+                                <ol class="list-decimal list-inside ml-4">
+                                    <li>A fully configured eMaint inventory database with all critical parts loaded.</li>
+                                    <li>A physically labeled and organized stock room corresponding to the eMaint system.</li>
+                                    <li>A functional barcode scanning system for check-in/check-out.</li>
+                                    <li>Training session completed with all relevant R&D personnel.</li>
+                                    <li>Finalized SOP documents for all inventory management functions.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Standardized Collapsible SOP Section -->
+                <div class="mt-8">
+                    <details class="border border-gray-200 rounded-lg bg-white overflow-hidden" open>
+                        <summary class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                                <i class="fas fa-cogs mr-3 text-indigo-600"></i>
+                                Standard Operating Procedures (SOPs)
+                            </h3>
+                            <span class="chevron text-indigo-600 transform transition-transform duration-200 text-2xl font-light">&rsaquo;</span>
+                        </summary>
+                        <div class="p-6 border-t border-gray-200 space-y-8 text-gray-700">
+                            <!-- UniFi SOPs -->
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-800 border-b pb-2">UniFi System SOPs</h4>
+                                <div class="mt-4 pl-4 border-l-4 border-indigo-500 space-y-6">
+                                    <div>
+                                        <h5 class="font-semibold text-lg">SOP-VIEW-001: Remote Viewing & Export</h5>
+                                        <p class="text-sm text-gray-600"><strong>Purpose:</strong> To define the standard process for authorized personnel to access live camera feeds and export video evidence from the UniFi Protect system.</p>
+                                        <ol class="list-decimal list-inside ml-4 mt-2 space-y-2">
+                                            <li><strong>Access Portal:</strong> Navigate to <strong>https://unifi.ui.com/</strong> and log in. Select the appropriate site, then click the "Protect" icon.</li>
+                                            <li><strong>Live View:</strong> The default "Live View" shows a grid of all cameras. Click any camera to view it full-screen. Use the digital zoom controls as needed.</li>
+                                            <li><strong>Find Recordings:</strong> Click the "Detections" tab for a list of motion events, or the "Timelapse" tab to scrub through all footage chronologically. Use the calendar and camera filters to narrow your search.</li>
+                                            <li><strong>Export Clip:</strong> When viewing a recording, click the "Download Clip" (scissors) icon. Drag the start and end handles on the timeline to select the precise portion needed. Click 'Download' to save the MP4 file to your computer.</li>
+                                        </ol>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold text-lg">SOP-TECH-001: Field Troubleshooting</h5>
+                                        <div class="text-sm mt-2 p-2 bg-yellow-100 border border-yellow-300 rounded-md"><strong>SAFETY FIRST:</strong> Always ensure the main equipment is powered down and you have clearance before physically inspecting cables in active machinery areas.</div>
+                                        <ol class="list-decimal list-inside ml-4 mt-2 space-y-2">
+                                            <li><strong>Initial Triage:</strong> If a camera is offline, first perform a hard refresh of your browser (Ctrl+F5).</li>
+                                            <li><strong>System-Wide Outage:</strong> Check the UniFi PoE Switch lights. The main status light should be SOLID BLUE. If the switch is on, perform a hard power cycle: unplug it, wait 60 seconds, plug it back in.</li>
+                                            <li><strong>Single Camera Outage:</strong> Check the switch port light. SOLID BLUE is good, AMBER indicates a cable fault. Trace the cable for damage and use a tester to verify wiring. If the cable is good, attempt a physical reset of the camera.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-8">
+                            <!-- Cradlepoint SOPs -->
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-800 border-b pb-2">Cradlepoint System SOPs</h4>
+                                <div class="mt-4 pl-4 border-l-4 border-indigo-500 space-y-6">
+                                    <div>
+                                        <h5 class="font-semibold text-lg">SOP-FIELD-004: Mobile Internet Troubleshooting</h5>
+                                        <p class="text-sm text-gray-600"><strong>Purpose:</strong> To empower field teams to resolve common internet connectivity issues with the Cradlepoint router, minimizing downtime.</p>
+                                        <ol class="list-decimal list-inside ml-4 mt-2 space-y-3">
+                                            <li><strong>Step 1: The 60-Second Power Cycle (Fixes 90% of issues).</strong> Unplug the router, wait a full 60 seconds, plug it back in. Wait 5 minutes for it to fully boot and connect before testing.</li>
+                                            <li><strong>Step 2: Check Status Lights.</strong>
+                                                <ul class="list-disc list-inside ml-6 space-y-2">
+                                                    <li><strong>Power:</strong> <div class="flex items-center gap-x-2"><div class="w-4 h-4 rounded-full bg-green-500 border border-gray-400"></div><span>SOLID GREEN is normal.</span></div></li>
+                                                    <li><strong>Modem:</strong> <div class="flex items-center gap-x-2"><div class="w-4 h-4 rounded-full bg-green-500 border border-gray-400"></div><span>SOLID GREEN is connected.</span></div> <div class="flex items-center gap-x-2"><div class="w-4 h-4 rounded-full bg-green-500 border border-gray-400 blinking-light"></div><span>BLINKING GREEN is connecting.</span></div></li>
+                                                    <li><strong>Signal Strength:</strong> <div class="flex items-end space-x-1"><div class="w-2 h-2 rounded-sm bg-indigo-500"></div><div class="w-2 h-3 rounded-sm bg-indigo-500"></div><div class="w-2 h-4 rounded-sm bg-indigo-500"></div></div><span>3-4 BLUE bars is excellent. 1-2 is weak.</span></div></li>
+                                                </ul>
+                                            </li>
+                                            <li><strong>Step 3: Check Antennas.</strong> Ensure all antennas are screwed on finger-tight and pointing straight up.</li>
+                                            <li><strong>Step 4: Escalation.</strong> If issues persist, contact IT Support. Provide the status of the lights.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-8">
+                            <!-- eMaint SOPs -->
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-800 border-b pb-2">eMaint Inventory SOPs</h4>
+                                <div class="mt-4 pl-4 border-l-4 border-indigo-500 space-y-6">
+                                    <div>
+                                        <h5 class="font-semibold text-lg">SOP-INV-001: Issuing a Part to a Work Order</h5>
+                                        <p class="text-sm text-gray-600"><strong>Purpose:</strong> To correctly decrement inventory and assign costs by checking out parts against a specific job.</p>
+                                        <div class="workflow-container my-4 bg-gray-100 border border-gray-200 rounded-lg"><div class="workflow-step">Scan Bin Barcode</div><div class="workflow-arrow"></div><div class="workflow-step">Enter Quantity</div><div class="workflow-arrow"></div><div class="workflow-step">Enter Work Order #</div><div class="workflow-arrow"></div><div class="workflow-end">Click Save</div></div>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold text-lg">SOP-INV-002: Receiving a New Purchase Order</h5>
+                                        <p class="text-sm text-gray-600"><strong>Purpose:</strong> To correctly increment inventory when new stock arrives.</p>
+                                        <div class="workflow-container my-4 bg-gray-100 border border-gray-200 rounded-lg"><div class="workflow-step">Enter PO Number</div><div class="workflow-arrow"></div><div class="workflow-step">Verify Physical Count vs. Slip</div><div class="workflow-arrow"></div><div class="workflow-step">Enter Quantity Received</div><div class="workflow-arrow"></div><div class="workflow-end">Click Receive & Stock Item</div></div>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold text-lg">SOP-INV-003: Performing a Cycle Count</h5>
+                                        <p class="text-sm text-gray-600"><strong>Purpose:</strong> To regularly verify the accuracy of the system inventory against physical stock.</p>
+                                        <div class="workflow-container my-4 bg-gray-100 border border-gray-200 rounded-lg"><div class="workflow-step">Generate Count Sheet</div><div class="workflow-arrow"></div><div class="workflow-step">Physically Count Items in Bin</div><div class="workflow-arrow"></div><div class="workflow-step">Enter Physical Count in System</div><div class="workflow-arrow"></div><div class="workflow-end">Save & Report Discrepancies</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+Name Servers:
+ns2.inmotionhosting.com
+ns1.inmotionhosting.com
+ns3.inmotionhosting.com
+ns4.inmotionhosting.com
+
+DNS:
+CNAME - autodiscover.jrauckhorst.com - Hostname: autodiscover.outlook.com
+MX Records - @.jrauckhorst.com - Priority: 0 - Hostname: jrauckhorst-com.mail.protection.outlook.com
+TXT Records - @.jrauckhorst.com - text: v=spf1 include:spf.protection.outlook.com -all
+A Record - @.jrauckhorst.com - IP Address: 64.99.64.37

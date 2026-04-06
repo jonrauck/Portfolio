@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study: Building a Digital HQ</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        .custom-card {
+            background-color: #f0f9ff; /* A very light blue */
+            border: 1px solid #e0f2fe;
+        }
+        /* Style to prevent background scroll when modal is open */
+        .modal-open {
+            overflow: hidden;
+        }
+        
+        /* Add styles for category lines, etc. */
+        /* Styles for Case Study Modals */
+        .modal-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-container {
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal-scroll-content {
+            -webkit-overflow-scrolling: touch;
+        }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] .chevron {
+            transform: rotate(90deg);
+        }
+        .scorecard-table, .sow-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .scorecard-table th, .scorecard-table td,
+        .sow-table th, .sow-table td {
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .scorecard-table thead th, .sow-table thead th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+        }
+        .swimlane {
+            flex: 1;
+            background-color: #f9fafb;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            min-width: 200px;
+        }
+        .swimlane-header {
+            padding: 0.75rem;
+            font-weight: bold;
+            border-bottom: 1px solid #e5e7eb;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .task-box {
+            background-color: white;
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+        .fishbone {
+    position: relative;
+    padding: 2rem 0;
+}
+.fishbone-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.fishbone-spine {
+    flex-grow: 1;
+    height: 4px;
+    background-color: #374151;
+}
+.fishbone-head {
+    background-color: #2563EB; /* Blue box */
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.375rem;
+    font-weight: bold;
+    text-align: center;
+    flex-shrink: 0; /* Prevents the head from shrinking */
+}
+.fishbone-ribs-top, .fishbone-ribs-bottom {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+/* THIS IS THE NEW CODE FOR SPACING */
+.fishbone-ribs-top {
+    margin-bottom: 1.5rem; /* Pushes the top ribs up, away from the center */
+}
+.fishbone-ribs-bottom {
+    margin-top: 1.5rem; /* Pushes the bottom ribs down, away from the center */
+}
+.fishbone-category {
+    position: relative;
+    padding: 1rem;
+    width: 30%;
+}
+.fishbone-ribs-top .fishbone-category {
+    padding-bottom: 2.5rem; /* Controls space for the bone */
+}
+.fishbone-ribs-bottom .fishbone-category {
+    padding-top: 2.5rem; /* Controls space for the bone */
+}
+.fishbone-ribs-top .fishbone-category::after,
+.fishbone-ribs-bottom .fishbone-category::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    background: #6b7280;
+    left: 50%;
+    transform: translateX(-50%); /* Center the line */
+}
+.fishbone-ribs-top .fishbone-category::after {
+    height: 2.5rem; /* This is the bone length */
+    bottom: 0; /* Position at the bottom edge of the category box */
+}
+.fishbone-ribs-bottom .fishbone-category::after {
+    height: 2.5rem; /* This is the bone length */
+    top: 0; /* Position at the top edge of the category box */
+}
+.fishbone-category h4 { 
+    font-weight: bold; 
+    margin-bottom: 0.5rem; 
+}
+.fishbone-category ul { 
+    list-style-type: disc; 
+    padding-left: 1rem; 
+    font-size: 0.875rem; 
+}
+        .workflow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .workflow-step, .workflow-end {
+            background-color: #fff;
+            border: 1px solid #d1d5db;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+        .workflow-end { background-color: #dbeafe; border-color: #93c5fd; }
+        .workflow-arrow::after {
+            content: '→';
+            font-size: 1.5rem;
+            color: #9ca3af;
+        }
+        .blinking-light {
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Main Page Container -->
+    <div class="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+        <div class="bg-white rounded-lg shadow-xl w-full flex flex-col">
+            <!-- Header Section -->
+            <div class="p-6 md:p-8 border-b">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-sm font-semibold text-emerald-600">BUSINESS OPERATIONS</span>
+                        <h2 id="modal-title-2" class="text-2xl md:text-3xl font-bold text-gray-900 mt-1">Building a Digital HQ</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="overflow-y-auto bg-slate-50">
+                <div class="p-8 md:p-12 space-y-16">
+                    
+                    <!-- Executive Summary -->
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-rocket mr-3 text-indigo-600"></i>1.0 Executive Summary</h2>
+                        <div class="mt-4 border-l-4 border-indigo-500 pl-6 text-gray-700 leading-relaxed">
+                            <div><p>A growing real estate investment firm faced significant operational friction. The absence of a centralized system led to disorganized files, fragmented communication, and a non-professional image (e.g., using @gmail.com addresses), creating unacceptable business risks.</p><br>
+                            <p>This case study shows I designed and deployed a cost-effective "Digital HQ" using Google Workspace. This involved establishing a professional domain, architecting an intuitive file system to serve as the Single Source of Truth (SSOT), implementing role-based security, and creating empowering SOPs.
+                            The project eliminated critical risks, reduced administrative waste by over 95%, and established a scalable foundation for future growth. The firm now operates with enhanced professionalism, security, and efficiency.</p></div>
+                        </div>
+                    </section>
+                    
+                    <!-- The Challenge -->
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-tachometer-alt mr-3 text-indigo-600"></i>2.0 Key Performance Indicators (KPIs)</h2>
+                        <div class="mt-6 overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead><tr><th class="p-3 font-semibold bg-gray-100 text-gray-800 rounded-l-lg">Metric</th><th class="p-3 font-semibold bg-gray-100 text-gray-800 text-center">Before Solution</th><th class="p-3 font-semibold bg-gray-100 text-gray-800 text-center">After Solution</th><th class="p-3 font-semibold bg-gray-100 text-gray-800 text-center rounded-r-lg">Improvement</th></tr></thead>
+                                <tbody class="divide-y divide-gray-200 text-gray-700">
+                                    <tr><td class="p-3 font-medium">Time to Retrieve Document</td><td class="p-3 text-center text-red-600">~50+ Minutes</td><td class="p-3 text-center text-green-600">&lt; 1 Minute</td><td class="p-3 text-center font-bold text-green-700">&gt;98% Reduction</td></tr>
+                                    <tr><td class="p-3 font-medium">Rework from Incorrect Versions</td><td class="p-3 text-center text-red-600">High Risk (Hours/Days)</td><td class="p-3 text-center text-green-600">Eliminated</td><td class="p-3 text-center font-bold text-green-700">100% Risk Mitigation</td></tr>
+                                    <tr><td class="p-3 font-medium">System Management</td><td class="p-3 text-center text-red-600">Consultant Dependent</td><td class="p-3 text-center text-green-600">Self-Sufficient</td><td class="p-3 text-center font-bold text-green-700">Empowered Team</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    
+                    <!-- The Solution -->
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-search-dollar mr-3 text-indigo-600"></i>3.0 Lean Six Sigma Analysis: Value Stream Mapping</h2>
+                        <p class="mt-4 text-center text-gray-700 max-w-3xl mx-auto">A Value Stream Map (VSM) of the "before" state revealed significant non-value-added activities (Waste) in the process of finding a project document. The primary wastes identified were <strong class="text-red-600">Waiting</strong>, <strong class="text-red-600">Defects</strong> (using wrong files), and <strong class="text-red-600">Motion</strong> (searching multiple locations).</p>
+                        <div class="mt-8 grid md:grid-cols-2 gap-8">
+                            <div class="border border-red-200 bg-red-50 p-6 rounded-lg"><h4 class="font-bold text-lg text-center mb-4 text-red-800">BEFORE: Disjointed Workflow</h4><div class="space-y-3 text-gray-700"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold">1</div><span>Employee Needs Doc</span></div><div class="pl-10 text-2xl">↓</div><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center font-bold">!</div><span class="text-red-600">Searches Email (Waste: 15min)</span></div><div class="pl-10 text-2xl">↓</div><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center font-bold">!</div><span class="text-red-600">Asks Coworker (Waste: 25min)</span></div><div class="pl-10 text-2xl">↓</div><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-red-700 text-white flex items-center justify-center font-bold">X</div><span class="font-semibold text-red-700">Rework Required (RISK: Hours-Days)</span></div></div></div>
+                            <div class="border border-green-200 bg-green-50 p-6 rounded-lg"><h4 class="font-bold text-lg text-center mb-4 text-green-800">AFTER: Optimized Workflow</h4><div class="space-y-3 text-gray-700"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold">1</div><span>Employee Needs Doc</span></div><div class="pl-10 text-2xl">↓</div><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">2</div><span class="text-green-700">Navigates to Google Drive</span></div><div class="pl-10 text-2xl">↓</div><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">3</div><span class="text-green-700">Finds Correct File Instantly</span></div><div class="pl-10 text-2xl">↓</div><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-green-700 text-white flex items-center justify-center font-bold">✓</div><span class="font-semibold text-green-800">Proceeds with Confidence</span></div></div></div>
+                        </div>
+                    </section>
+                    
+                    <!-- The Results -->
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 flex items-center"><i class="fas fa-folder-tree mr-3 text-indigo-600"></i>4.0 Deliverable: Information Architecture</h2>
+                        <p class="mt-4 mb-8 text-gray-700">A key deliverable was the design of a scalable and intuitive information architecture. This structure separates company administration from project operations, incorporates role-based access controls, and provides a standardized template for all new projects to ensure consistency.</p>
+                        <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-4">Part 1: Company-Wide Directory</h3>
+                    <div class="bg-slate-100 p-4 rounded-lg font-mono text-sm text-slate-800">
+                        <p>📁 [Your Company Name]</p>
+                        <div class="pl-4">
+                            <p class="mt-1">📁 Investment_Properties <span class="text-blue-600">[All Users]</span></p>
+                            <div class="pl-4">
+                                <p class="mt-1">📁 [Template] Project_Folder</p>
+                                <p class="mt-1">📁 2020_Katy_Project</p>
+                                <p class="mt-1">📁 2024_Brenham_Project</p>
+                                <p class="mt-1">📁 2025_Pasadena_Project</p>
+                                <p class="mt-1">📁 2022_Canyon_Lake_Project</p>
+                            </div>
+                            <p class="mt-1">📁 Operations <span class="text-blue-600">[All Users]</span></p>
+                            <div class="pl-4">
+                                <p class="mt-1">📁 SOPs</p>
+                                <p class="mt-1">📁 Templates</p>
+                                <p class="mt-1">📁 Workflows</p>
+                            </div>
+                            <p class="mt-1">📁 Company_Admin <span class="text-red-600">[Restricted]</span></p>
+                            <div class="pl-4">
+                                <p class="mt-1">📁 Branding</p>
+                                <p class="mt-1">📁 Legal</p>
+                                <p class="mt-1">📁 Financial</p>
+                            </div>
+                            <p class="mt-1">📁 Users <span class="text-purple-600">[Private]</span></p>
+                            <div class="pl-4">
+                                <p class="mt-1">📁 Jonathan_Rauckhorst</p>
+                                <p class="mt-1">📁 Jane_Smith</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-4">Part 2: Project Folder Template</h3>
+                    <div class="bg-slate-100 p-4 rounded-lg font-mono text-sm text-slate-800">
+                         <p>📁 [YYYY_Project_Name]</p>
+                         <div class="pl-4">
+                            <p class="mt-1">📁 01_Project_Management</p>
+                            <p class="mt-1">📁 02_Design</p>
+                            <p class="mt-1">📁 03_Estimates</p>
+                            <p class="mt-1">📁 04_Contracts_And_Legal</p>
+                            <p class="mt-1">📁 05_Financials</p>
+                            <p class="mt-1">📁 06_Permits_And_Inspections</p>
+                            <p class="mt-1">📁 07_Photos_And_Media</p>
+                            <div class="pl-4">
+                                <p class="mt-1">📁 Before_Renovation</p>
+                                <p class="mt-1">📁 After_Renovation</p>
+                            </div>
+                            <p class="mt-1">📁 08_Rental_Data</p>
+                            <p class="mt-1">📁 _Archive</p>
+                         </div>
+                    </div>
+                </div>
+            </div>
+                    </section>
+                    
+                    <!-- Key Deliverable Section -->
+                    <div class="mt-12">
+                    <details class="border border-gray-200 rounded-lg bg-white overflow-hidden" open>
+                        <summary class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                                <i class="fas fa-file-signature mr-3 text-indigo-600"></i>
+                                Statement of Work (SOW)
+                            </h3>
+                            <span class="chevron text-indigo-600 transform transition-transform duration-200 text-2xl font-light">&rsaquo;</span>
+                        </summary>
+                        <div class="p-6 border-t border-gray-200 text-gray-700">
+                            <table class="w-full mb-6">
+                                <tr><td class="font-semibold text-gray-800 w-1/4">Prepared for:</td><td>[Client Company Name]</td></tr>
+                                <tr><td class="font-semibold text-gray-800">Prepared by:</td><td>Jonathan Rauckhorst, Operations Consultant</td></tr>
+                                <tr><td class="font-semibold text-gray-800">Date:</td><td>July 17, 2025</td></tr>
+                            </table>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2 mt-4">Project: Foundational Operations & Digital HQ Setup</h3>
+                            <h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">1. Project Overview & Objectives</h4>
+                            <p>This project will remediate operational inefficiencies by establishing a centralized Digital HQ. Key objectives include deploying Google Workspace for professional identity, implementing a secure and scalable file management system (SSOT), defining role-based access controls, and delivering documentation to ensure client self-sufficiency.</p>
+                            <h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">2. Scope of Services & Deliverables</h4>
+                            <div class="overflow-x-auto">
+                                <table class="w-full sow-table">
+                                    <thead><tr><th>Phase</th><th>Description</th><th>Key Deliverables</th></tr></thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Phase 1: Foundation</strong></td>
+                                            <td>Procure domain, set up Google Workspace, configure core services, and establish user roles.</td>
+                                            <td>1. Secured Domain Name.<br>2. Active Google Workspace with professional emails.<br>3. Defined User Roles (Admin, Member).</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Phase 2: Architecture</strong></td>
+                                            <td>Build out the approved information architecture and apply role-based permissions.</td>
+                                            <td>1. Approved Folder Structure built in Google Drive.<br>2. Role-Based Permissions implemented.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Phase 3: Empowerment</strong></td>
+                                            <td>Develop a user-friendly SOP and train the client on usage and maintenance.</td>
+                                            <td>1. Comprehensive SOP & User Guide.<br>2. Live Training Session (recorded).<br>3. 30 days of post-launch email support.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">3. Out of Scope</h4>
+                            <ul class="list-disc pl-6">
+                                <li>Website design or development.</li>
+                                <li>Procurement or management of any software beyond Google Workspace.</li>
+                                <li>Data entry or migration of existing unorganized files.</li>
+                                <li>Ongoing IT helpdesk support beyond the specified 30-day period.</li>
+                            </ul>
+                            <h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">4. Assumptions</h4>
+                            <ul class="list-disc pl-6">
+                                <li>Client will provide timely access to necessary accounts and information.</li>
+                                <li>Key stakeholders will be available for scheduled meetings and training.</li>
+                                <li>Decisions and feedback will be provided within 2 business days of request.</li>
+                            </ul>
+                            <h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">5. Project Investment</h4>
+                            <p>A detailed quote will be provided upon request. Pricing is typically structured as a fixed fee for the total project scope.</p>
+                            <h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">6. Acceptance Criteria</h4>
+                            <p>This project will be considered complete upon the client's written confirmation (email sufficient) that all deliverables outlined in Section 2 have been provided and the training session has been concluded.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Standardized Collapsible SOP Section -->
+                <div class="mt-8">
+                    <details class="border border-gray-200 rounded-lg bg-white overflow-hidden" open>
+                        <summary class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                                <i class="fas fa-cogs mr-3 text-indigo-600"></i>
+                                Sample: Standard Operating Procedure (SOP)
+                            </h3>
+                            <span class="chevron text-indigo-600 transform transition-transform duration-200 text-2xl font-light">&rsaquo;</span>
+                        </summary>
+                        <div class="p-6 border-t border-gray-200 text-gray-700">
+                             <h3 class="text-xl font-bold text-gray-800 mb-2">SOP: Digital File Management</h3>
+                            <table class="w-full my-4 text-sm">
+                                <tr><td class="font-semibold p-2 bg-gray-50 w-1/4">SOP ID:</td><td class="p-2">OPS-001</td></tr>
+                                <tr><td class="font-semibold p-2 bg-gray-50">Version:</td><td class="p-2">1.0</td></tr>
+                                <tr><td class="font-semibold p-2 bg-gray-50">Effective Date:</td><td class="p-2">July 17, 2025</td></tr>
+                                <tr><td class="font-semibold p-2 bg-gray-50">Owner:</td><td class="p-2">Operations Manager</td></tr>
+                            </table>
+                            <h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">1. Purpose & Scope</h4>
+                            <p>This document outlines the standard procedure for creating, naming, storing, and archiving all digital files within the company's Google Drive. Adherence to this SOP is mandatory for all employees to ensure information integrity and operational efficiency.</p>
+                            <h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">2. Roles & Responsibilities</h4>
+                            <ul class="list-disc pl-6">
+                                <li><strong>All Users:</strong> Responsible for adhering to the file naming convention and storing files in their correct locations.</li>
+                                <li><strong>Admin Users (Owner, Assistant):</strong> Responsible for creating new top-level project folders, managing user access, and performing periodic audits.</li>
+                            </ul>
+                            <h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">3. The Golden Rules of Filing</h4>
+                            <ol class="list-decimal pl-6 space-y-4">
+                                <li><strong>Always Save to the Cloud.</strong> Never save a final work document only to your computer's desktop. All work must be saved in the appropriate Google Drive folder.</li>
+                                <li><strong>Use the Project Template.</strong> For every new investment property, an Admin User must duplicate the "[Template] Project_Folder" and rename it according to the standard: <code>YYYY_Project_Name</code>.</li>
+                                <li><strong>Follow the Naming Convention.</strong> Proper naming is critical for search and version control.
+                                    <div class="bg-gray-100 p-4 rounded-lg my-4">
+                                        <p class="font-mono font-semibold">Format: <code>YYYY-MM-DD_Description_vX.X.ext</code></p>
+                                        <ul class="text-sm mt-2 list-disc list-inside">
+                                            <li><strong>YYYY-MM-DD:</strong> The date the file was created or significantly revised.</li>
+                                            <li><strong>Description:</strong> A clear, concise description (e.g., <code>Katy-Plumbing-Contract</code>).</li>
+                                            <li><strong>vX.X:</strong> The version number (e.g., <code>v1.0</code>, <code>v1.1</code>, <code>v2.0</code>).</li>
+                                            <li><strong>Example:</strong> <code>2025-07-17_Katy-Plumbing-Contract_v1.0.pdf</code></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><strong>Manage Versions Correctly.</strong>
+                                    <ul class="list-disc pl-6">
+                                        <li>When updating a file, do not overwrite the old one.</li>
+                                        <li><strong>Step 1:</strong> Move the previous version (e.g., `..._v1.0.pdf`) into the `_Archive` folder within that project.</li>
+                                        <li><strong>Step 2:</strong> Save the new file with the incremented version number (e.g., `..._v1.1.pdf`) in the correct working directory.</li>
+                                        <li>This ensures a complete history is preserved while keeping the working directory clean.</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+
+</body>
+</html>
