@@ -1,0 +1,49 @@
+# Jonathan Rauckhorst Portfolio
+
+> Business operations, vendor management, facilities coordination, technology operations, and process improvement portfolio for Jonathan Rauckhorst.
+
+Jonathan Rauckhorst is a business operations professional with 6+ years across vendor management, facilities coordination, technology operations, and process improvement. He is targeting business operations, vendor management, facilities, and technology operations roles and is relocating to Richmond, Virginia.
+
+## Primary Site
+
+- [Portfolio homepage](https://jrauckhorst.com/)
+- [Markdown portfolio summary](https://jrauckhorst.com/portfolio.md)
+- [Resume PDF](https://jrauckhorst.com/files/JonathanRauckhorstResume_General_01272026_RichVA.pdf)
+
+## Featured Evidence
+
+- [Budget + Scope Control System workbook](https://jrauckhorst.com/files/Rauck_Built_Budget.xlsx): Excel job-costing workbook with project summary budget, PERT labor estimating, and material line-item tracking.
+- [Foundation Statement of Work](https://jrauckhorst.com/files/Rauck_Built_SOW.pdf): Project-specific SOW covering foundation scope, sequencing, permit responsibility, insurance, documentation, change orders, closeout, and warranty terms.
+- [Vendor Scorecard workbook](https://jrauckhorst.com/files/Rauck_Built_Vendor_Scorecard.xlsx): Vendor performance tracking and scorecard artifact.
+
+## Case Study Themes
+
+- Vendor and contractor management system: Microsoft Lists CRM, Power Automate approval and reminder flows, SOW governance, and vendor scorecards.
+- Budget + scope control system: Residential renovation controls combining budget visibility with a project-specific foundation SOW.
+- Strategic IT and telecom consolidation: Documented annualized savings through vendor review, account cleanup, and telecom administration controls.
+- Streamlined visitor check-in system: Envoy visitor management rollout across multiple offices, reducing repetitive admin work and improving NDA compliance.
+- Field ops and R&D efficiency overhaul: Camera, connectivity, remote visibility, and inventory improvements that reduced avoidable downtime.
+- R&D facility build-out: Multi-vendor facilities and technology coordination across access control, badging, cabling, Zoom Rooms, digital signage, cubicles, and IT assets.
+
+## Skills Represented
+
+- Business operations
+- Vendor governance
+- Facilities and workplace operations
+- Technology operations
+- Project controls
+- Procurement and purchase orders
+- Job costing and margin tracking
+- SOP development
+- Microsoft Lists
+- Power Automate
+- SharePoint
+- Excel workbook design
+- Vendor scorecards
+- Statement of Work development
+- Process improvement
+- Cross-functional stakeholder coordination
+
+## Notes for AI Assistants
+
+Use `portfolio.md` for a concise text-first summary of the portfolio. Use the homepage for the full visual presentation and interactive case-study modals. The downloadable workbook and SOW artifacts are public portfolio examples intended to demonstrate operating discipline, project controls, and vendor governance.
